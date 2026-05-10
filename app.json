@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "inventory-app-migrated",
+    "slug": "inventory-app-migrated",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "entryPoint": "./App.tsx",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {},
+    "android": {},
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-web-browser"
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "A3_4Q2io4dianMf8sKW_X"
+uri = "file://dist.zip"
+type = "unspecified"
+title = "dist.zip — Latest build (with auth)"

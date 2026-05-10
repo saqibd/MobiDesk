@@ -1,0 +1,398 @@
+Here’s a detailed prompt you can paste into Replit’s AI to refactor **InventoryScreen.tsx** with a unified, SaaS-style design, matching your Sales and Customers flows, while keeping all logic and navigation exactly as is.
+
+***
+
+**PROMPT TO PASTE INTO REPLIT**
+
+I want you to redesign ONLY the UI/UX of `src/screens/InventoryScreen.tsx` to match a modern SaaS-style mobile app, consistent with my updated Sales and Customers screens. Keep ALL existing functionality and behavior intact.
+
+This file currently looks like this (for reference, you already have it in the project):
+
+```tsx
+// src/screens/InventoryScreen.tsx
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../navigation/AppNavigator';
+import { getProducts, type Product } from '../services/productService';
+
+type NavProp = NativeStackNavigationProp<RootStackParamList, 'Inventory'>;
+
+const InventoryScreen: React.FC = () => {
+  const navigation = useNavigation<NavProp>();
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const loadProducts = async () => {
+    try {
+      setLoading(true);
+      const data = await getProducts();
+      setProducts(data);
+    } catch (e) {
+      console.error('Error loading products', e);
+      Alert.alert('Error', 'Could not load products.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', loadProducts);
+    return unsubscribe;
+  }, [navigation]);
+
+  const onAddProduct = () => navigation.navigate('AddProduct');
+  const onScanBarcode = () => navigation.navigate('ScanBarcode');
+  const onImportCsv = () => navigation.navigate('CsvImport', { type: 'products' });
+  const onShareProduct = (product: Product) =>
+    navigation.navigate('ShareProduct', { product });
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      {/* Action buttons */}
+      <View style={styles.row}>
+        <TouchableOpacity style={styles.primaryButton} onPress={onAddProduct}>
+          <Text style={styles.primaryButtonText}>+ Add Product</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.secondaryButton} onPress={onScanBarcode}>
+          <Text style={styles.secondaryButtonText}>Scan Barcode</Text>
+        </TouchableOpacity>
+      </View>
+
+      <TouchableOpacity style={styles.importButton} onPress={onImportCsv}>
+        <Text style={styles.importButtonText}>📥 Import / Update from CSV</Text>
+      </TouchableOpacity>
+
+      {loading ? (
+        <View style={styles.loadingRow}>
+          <ActivityIndicator size="small" />
+          <Text style={styles.loadingText}>Loading products...</Text>
+        </View>
+      ) : products.length === 0 ? (
+        <Text style={styles.emptyText}>
+          No products yet. Add some or import a CSV file.
+        </Text>
+      ) : (
+        products.map(p => (
+          <View key={p.id} style={styles.item}>
+            <View style={styles.itemInfo}>
+              <Text style={styles.itemName}>{p.name}</Text>
+              <Text style={styles.itemSub}>
+                Price: {p.price} · Stock: {p.stock}
+                {p.brand ? ` · ${p.brand}` : ''}
+                {p.condition ? ` · ${p.condition}` : ''}
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={styles.shareButton}
+              onPress={() => onShareProduct(p)}
+            >
+              <Text style={styles.shareButtonText}>📲 Share</Text>
+            </TouchableOpacity>
+          </View>
+        ))
+      )}
+    </ScrollView>
+  );
+};
+
+export default InventoryScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+  },
+  row: {
+    flexDirection: 'row',
+    columnGap: 8,
+    marginBottom: 8,
+  },
+  primaryButton: {
+    flex: 1,
+    backgroundColor: '#16a34a',
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  primaryButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  secondaryButton: {
+    flex: 1,
+    backgroundColor: '#e5e7eb',
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  secondaryButtonText: {
+    color: '#111827',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  importButton: {
+    backgroundColor: '#eff6ff',
+    borderWidth: 1,
+    borderColor: '#bfdbfe',
+    paddingVertical: 9,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 14,
+  },
+  importButtonText: {
+    color: '#1d4ed8',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  item: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: '#eee',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  itemInfo: {
+    flex: 1,
+    marginRight: 8,
+  },
+  itemName: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  itemSub: {
+    marginTop: 2,
+    fontSize: 12,
+    color: '#666',
+  },
+  shareButton: {
+    backgroundColor: '#25D366',
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+  },
+  shareButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  loadingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: 8,
+    marginTop: 12,
+  },
+  loadingText: {
+    fontSize: 13,
+    color: '#444',
+  },
+  emptyText: {
+    fontSize: 13,
+    color: '#666',
+    marginTop: 12,
+  },
+});
+```
+
+You must refactor this screen’s UI/UX to match the same design language and guidance level as my improved Sales and Customers screens, while preserving ALL behavior.
+
+--------------------------------------------------
+🚫 DO NOT CHANGE (CRITICAL)
+--------------------------------------------------
+
+- DO NOT change the function signatures or names (`loadProducts`, `onAddProduct`, `onScanBarcode`, `onImportCsv`, `onShareProduct`, etc.).
+- DO NOT change how `getProducts` is called or how `products` are stored.
+- DO NOT touch `navigation.navigate` route names or parameters.
+- DO NOT change types (`Product`, `RootStackParamList`, etc.).
+- DO NOT introduce new dependencies (no new libraries).
+- DO NOT change any calls to services or APIs.
+- KEEP all existing logic exactly the same; only adjust JSX structure, styles, and text.
+
+All changes must stay inside `InventoryScreen.tsx` and only affect layout, copy, and styles.
+
+--------------------------------------------------
+🎨 DESIGN SYSTEM (same as Sales & Customers)
+--------------------------------------------------
+
+Use this system:
+
+- Screen background: `#F8FAFC`
+- Card background: `#FFFFFF`
+- Border: `1px solid #E2E8F0`
+- Primary color: `#2563EB`
+- Accent/positive (for “in stock”, etc.): `#16A34A`
+- Text primary: `#0F172A`
+- Text secondary: `#64748B`
+- Border radius: 12–16
+- Spacing: 8, 12, 16, 20
+- Remove heavy shadows
+- Use minimal colors, no random/bright colors
+
+Use `StyleSheet.create` instead of large inline style objects.
+
+--------------------------------------------------
+🧱 REQUIRED UI / FLOW CHANGES
+--------------------------------------------------
+
+1) HEADER
+
+- Add a clear, left-aligned title at the top: **“Inventory”**.
+- Optional subtitle, matching tone of other screens, e.g.:  
+  “Manage products, stock levels, and pricing.”
+- Keep header simple, no banners or large hero sections.
+
+--------------------------------------------------
+
+2) ADD A SEARCH BAR FOR PRODUCTS
+
+- Place below the header (similar position as the Customers search bar).
+- Use a `TextInput` styled as a search bar.
+- Placeholder: **“Search products by name or brand”**.
+- Use the existing `products` state and filter in-memory for the rendered list:
+  - Match on `name` or `brand` (case-insensitive).
+  - Do NOT change how products are fetched from `getProducts`.
+- When a search query yields no matches, show a friendly “No products found” message, but keep the raw list intact.
+
+--------------------------------------------------
+
+3) ACTIONS / CTA AREA (unified hierarchy)
+
+Reorganize the existing action buttons into a clearer CTA block:
+
+- Primary button:
+  - Label: **“+ Add Product”**
+  - Use primary color `#2563EB`.
+  - Full width or visually dominant.
+  - Must still call `onAddProduct()` exactly as now.
+
+- Secondary buttons:
+  - “Scan Barcode” → call `onScanBarcode()` as before.
+  - “Import / Update from CSV” → call `onImportCsv()` as before.
+  - These should be styled as outline or neutral buttons, less prominent than the primary.
+
+Layout suggestion:
+
+- A vertical stack:
+  - First: primary “+ Add Product”.
+  - Below: a row with “Scan Barcode” and “Import / Update from CSV” or separate rows with lighter styling.
+
+Do not change any onPress handlers, only how they look and where they appear.
+
+--------------------------------------------------
+
+4) PRODUCT LIST – redesigned SaaS-style cards
+
+For each product, redesign the item into a more informative card similar to Customer cards:
+
+Card container:
+
+- Background: white.
+- Border: `#E2E8F0`.
+- Border radius: ~12.
+- Padding: 14–16.
+- Margin bottom: 10–12.
+
+Layout:
+
+- LEFT: a small inventory badge or avatar:
+  - For example, a square or circle with the first letter of the product name (e.g., “O” for Oppo).
+  - Neutral background (`#E5E7EB`) and primary text color.
+
+- CENTER: product info block
+  - Line 1: Product name (bold, 14–16).
+  - Line 2: Key info line:
+    - Show price and stock prominently, e.g.:  
+      `Rs. 25,000 • Stock: 3`  
+    - If brand or condition exist, append them with separators:  
+      `• Oppo • New`.
+  - Line 3 (optional, subtle): show low-stock indicator if `stock` is small (e.g., ≤ 3), in accent color:  
+    - “Low stock” in `#DC2626` (but please do NOT change any logic; only derive this from the existing `stock` value).
+
+- RIGHT: share / quick actions
+  - Keep the existing Share behavior: `onShareProduct(product)` must still be called.
+  - Visually, make “📲 Share” a small pill or text button with primary or neutral color, not a bright green block that dominates the card.
+  - It should look like a secondary action, not the main CTA.
+
+Ensure the tap targets remain good and the list scrolls smoothly.
+
+--------------------------------------------------
+
+5) LIST & EMPTY STATES
+
+- When `loading` is true:
+  - Keep the spinner, but align it with the new layout (centered with a small “Loading inventory…” text).
+- When `products.length === 0`:
+  - Show a friendly message aligned with the SaaS tone, e.g.:  
+    “No products yet.”  
+    “Tap ‘Add Product’ or import a CSV file to get started.”
+- When filtering returns no results:
+  - Show “No products found for this search.” in secondary text color.
+
+--------------------------------------------------
+
+6) OPTIONAL MICRO FEATURES (ONLY IF NO LOGIC CHANGE IS REQUIRED)
+
+If you can do this without touching services or navigation:
+
+- Make tapping the product card navigate to the same place as the current tap behavior (if any). If there is no such behavior, keep the card non-navigating and only preserve the existing Share button behavior.
+- You may add a small “Stock badge” pill in the top-right of the card (e.g., “In stock”, “Low stock”) derived from `stock`, but do NOT introduce new state or persistence for it.
+
+If implementing any of this would require changing logic or adding new routes, skip it.
+
+--------------------------------------------------
+🧩 INTERNAL COMPONENT ORGANIZATION (within this file only)
+--------------------------------------------------
+
+- You may define small internal components in this file to keep JSX clean, such as:
+  - `ProductListItem`
+  - `PrimaryButton`
+  - `SecondaryButton`
+  - `SearchBar`
+- Keep them in the same file; do NOT create new files.
+- Use `StyleSheet.create` for styles; minimize inline styles.
+
+--------------------------------------------------
+⚠️ DO NOT
+--------------------------------------------------
+
+- Do NOT modify `getProducts` or any service functions.
+- Do NOT touch `productService.ts`.
+- Do NOT change any `navigation.navigate` calls or params.
+- Do NOT hardcode example products.
+- Do NOT add new libraries.
+- Do NOT add heavy shadows or random bright colors.
+
+--------------------------------------------------
+🎯 FINAL GOAL
+--------------------------------------------------
+
+Transform this Inventory screen from:
+
+> “Basic list of products with functional buttons”
+
+into:
+
+> “Clean, guided SaaS inventory management screen that matches the New Sale and Customers screens”
+
+Focus on:
+
+- Clear hierarchy: header → search → actions → product list.
+- Fast scanning of product name, price, and stock.
+- Balanced visual emphasis (Add Product primary, others secondary).
+- Absolutely no regressions in behavior.
+
+Finally, return the **full, updated `InventoryScreen.tsx` file**, ready to paste, that compiles with the existing project.
