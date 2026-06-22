@@ -63,10 +63,10 @@ const QUICK_ACTIONS = [
 ];
 
 const KPI_CONFIG = [
-  { key: 'totalStock', label: 'Total Stock', accent: '#2563EB', bg: '#EFF6FF' },
-  { key: 'stockValue', label: 'Stock Value', accent: '#16A34A', bg: '#F0FDF4' },
-  { key: 'lowStock', label: 'Low Stock', accent: '#DC2626', bg: '#FEF2F2' },
-  { key: 'sales3mo', label: '3-mo Sales', accent: '#7C3AED', bg: '#F5F3FF' },
+  { key: 'totalStock', label: 'Total Stock', accent: '#2563EB', bg: '#EFF6FF', icon: '📦' },
+  { key: 'stockValue', label: 'Stock Value', accent: '#16A34A', bg: '#F0FDF4', icon: '💰' },
+  { key: 'lowStock',   label: 'Low Stock',   accent: '#DC2626', bg: '#FEF2F2', icon: '⚠️' },
+  { key: 'sales3mo',  label: '3-mo Sales',  accent: '#7C3AED', bg: '#F5F3FF', icon: '📈' },
 ];
 
 export default function HomeScreen() {
@@ -235,16 +235,10 @@ export default function HomeScreen() {
         <Text style={styles.sectionLabel}>OVERVIEW</Text>
         <View style={styles.kpiGrid}>
           {KPI_CONFIG.map(k => (
-            <View key={k.key} style={[styles.kpiCard, { borderLeftColor: k.accent }]}>
-              <View style={[styles.kpiDot, { backgroundColor: k.bg }]}>
-                <View style={[styles.kpiDotInner, { backgroundColor: k.accent }]} />
-              </View>
-              <View>
-                <Text style={styles.kpiLabel}>{k.label}</Text>
-                <Text style={[styles.kpiValue, { color: k.accent }]}>
-                  {kpiValues[k.key]}
-                </Text>
-              </View>
+            <View key={k.key} style={[styles.kpiCard, { backgroundColor: k.bg }]}>
+              <Text style={styles.kpiIcon}>{k.icon}</Text>
+              <Text style={[styles.kpiValue, { color: k.accent }]}>{kpiValues[k.key]}</Text>
+              <Text style={styles.kpiLabel}>{k.label}</Text>
             </View>
           ))}
         </View>
@@ -420,45 +414,29 @@ const styles = StyleSheet.create({
   /* KPI */
   kpiGrid: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     gap: 8,
     marginBottom: 14,
   },
   kpiCard: {
-    width: '47.5%',
-    backgroundColor: '#FFFFFF',
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 10,
     borderRadius: 12,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderLeftWidth: 3,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    gap: 2,
   },
-  kpiDot: {
-    width: 28,
-    height: 28,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  kpiDotInner: { width: 10, height: 10, borderRadius: 5 },
+  kpiIcon: { fontSize: 18, marginBottom: 2 },
   kpiLabel: {
     fontSize: 10,
     color: '#64748B',
-    fontWeight: '500',
+    fontWeight: '600',
     letterSpacing: 0.1,
+    textAlign: 'center',
   },
   kpiValue: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
     letterSpacing: -0.3,
+    textAlign: 'center',
   },
 
   /* Alerts */
