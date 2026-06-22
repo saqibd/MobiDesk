@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
 import { signOut } from '../services/authService';
 
@@ -110,9 +111,17 @@ export default function AppNavigator() {
                 headerRight: () => (
                   <TouchableOpacity
                     onPress={() => signOut()}
-                    style={{ paddingHorizontal: 10, paddingVertical: 4 }}
+                    style={{
+                      width: 34,
+                      height: 34,
+                      borderRadius: 8,
+                      backgroundColor: '#DC2626',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginRight: 4,
+                    }}
                   >
-                    <Text style={{ fontSize: 20 }}>🚪</Text>
+                    <Ionicons name="power" size={18} color="#fff" />
                   </TouchableOpacity>
                 ),
               }}
