@@ -18,7 +18,6 @@ import {
   VictoryBar,
   VictoryChart,
   VictoryAxis,
-  VictoryPie,
   VictoryTheme,
 } from 'victory-native';
 
@@ -42,14 +41,33 @@ import { getActiveRemindersCount } from '../services/remindersService';
 
 type HomeNavProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
-const PIE_COLORS = ['#2563eb','#16a34a','#7c3aed','#ea580c','#0891b2','#e11d48'];
-
 function formatPKR(val: number) {
   if (!val) return 'PKR 0';
   if (val >= 1_000_000) return `PKR ${(val / 1_000_000).toFixed(1)}M`;
   if (val >= 1_000) return `PKR ${(val / 1_000).toFixed(0)}K`;
   return `PKR ${val}`;
 }
+
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h < 12) return 'Good morning';
+  if (h < 17) return 'Good afternoon';
+  return 'Good evening';
+}
+
+const QUICK_ACTIONS = [
+  { label: 'Sales', route: 'Sales' as const, icon: '🛒', color: '#2563EB', bg: '#EFF6FF' },
+  { label: 'Inventory', route: 'Inventory' as const, icon: '📦', color: '#16A34A', bg: '#F0FDF4' },
+  { label: 'Customers', route: 'Customers' as const, icon: '👤', color: '#7C3AED', bg: '#F5F3FF' },
+  { label: 'Reports', route: 'Reports' as const, icon: '📊', color: '#EA580C', bg: '#FFF7ED' },
+];
+
+const KPI_CONFIG = [
+  { key: 'totalStock', label: 'Total Stock', accent: '#2563EB', bg: '#EFF6FF' },
+  { key: 'stockValue', label: 'Stock Value', accent: '#16A34A', bg: '#F0FDF4' },
+  { key: 'lowStock', label: 'Low Stock', accent: '#DC2626', bg: '#FEF2F2' },
+  { key: 'sales3mo', label: '3-mo Sales', accent: '#7C3AED', bg: '#F5F3FF' },
+];
 
 export default function HomeScreen() {
   const navigation = useNavigation<HomeNavProp>();
@@ -118,204 +136,358 @@ export default function HomeScreen() {
       .slice(0, 8);
   }, [search, products]);
 
-  const categoryData = useMemo(() => {
-    const map: Record<string, number> = {};
-    for (const p of products) {
-      const cat = p.category ?? 'other';
-      map[cat] = (map[cat] ?? 0) + (p.stock ?? 0);
-    }
-    const entries = Object.entries(map).sort((a, b) => b[1] - a[1]).slice(0, 5);
-    if (!entries.length) return null;
-    return entries.map(([label, y], i) => ({
-      x: label,
-      y,
-      color: PIE_COLORS[i % PIE_COLORS.length],
-    }));
-  }, [products]);
-
   const barData = monthlySales.map(m => ({ x: m.month, y: m.total }));
   const hasBarData = barData.some(d => d.y > 0);
 
+  const kpiValues: Record<string, string> = {
+    totalStock: stats?.totalStock != null ? String(stats.totalStock) : '—',
+    stockValue: stats ? formatPKR(stats.stockValue) : '—',
+    lowStock: stats?.lowStockCount != null ? String(stats.lowStockCount) : '—',
+    sales3mo: threeMonthSales ? formatPKR(threeMonthSales) : '—',
+  };
+
+  const today = new Date().toLocaleDateString('en-GB', {
+    weekday: 'short', day: 'numeric', month: 'short',
+  });
+
+  const alertItems = [
+    {
+      label: 'Low stock items',
+      value: stats?.lowStockCount ?? 0,
+      color: '#DC2626',
+      bg: '#FEF2F2',
+      icon: '⚠️',
+    },
+    {
+      label: 'Pending orders',
+      value: pendingOrdersCount ?? 0,
+      color: '#EA580C',
+      bg: '#FFF7ED',
+      icon: '📋',
+    },
+    {
+      label: 'Active reminders',
+      value: remindersCount ?? 0,
+      color: '#7C3AED',
+      bg: '#F5F3FF',
+      icon: '🔔',
+    },
+  ];
+
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView contentContainerStyle={styles.container}>
-
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Header */}
-        <Text style={styles.headerTitle}>Dashboard</Text>
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.greeting}>{getGreeting()}</Text>
+            <Text style={styles.headerTitle}>Dashboard</Text>
+          </View>
+          <View style={styles.datePill}>
+            <Text style={styles.dateText}>{today}</Text>
+          </View>
+        </View>
 
         {/* Search */}
-        <View style={styles.search}>
+        <View style={styles.searchRow}>
+          <Text style={styles.searchIcon}>🔍</Text>
           <TextInput
-            placeholder="Search products..."
-            placeholderTextColor="#94a3b8"
+            placeholder="Search products by name, SKU or barcode…"
+            placeholderTextColor="#94A3B8"
             value={search}
             onChangeText={setSearch}
             style={styles.searchInput}
           />
         </View>
 
-        {/* Quick Actions */}
-        <View style={[styles.card, { marginTop: 0 }]}>
-          <Text style={styles.sectionTitle}>Quick Actions</Text>
-          <View style={styles.actions}>
-            <TouchableOpacity onPress={() => navigation.navigate('Sales')}>
-              <Text style={styles.action}>Sales</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Inventory')}>
-              <Text style={styles.action}>Inventory</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Customers')}>
-              <Text style={styles.action}>Customers</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Reports')}>
-              <Text style={styles.action}>Reports</Text>
-            </TouchableOpacity>
+        {/* Search Results */}
+        {filteredProducts.length > 0 && (
+          <View style={styles.searchResults}>
+            {filteredProducts.map(p => (
+              <View key={p.id} style={styles.searchResultItem}>
+                <Text style={styles.searchResultName}>{p.name}</Text>
+                <Text style={styles.searchResultSku}>{p.sku ?? p.barcode ?? ''}</Text>
+              </View>
+            ))}
           </View>
+        )}
+
+        {/* Quick Actions */}
+        <Text style={styles.sectionLabel}>QUICK ACTIONS</Text>
+        <View style={styles.actionsRow}>
+          {QUICK_ACTIONS.map(a => (
+            <TouchableOpacity
+              key={a.route}
+              style={[styles.actionBtn, { backgroundColor: a.bg }]}
+              onPress={() => navigation.navigate(a.route)}
+              activeOpacity={0.75}
+            >
+              <Text style={styles.actionIcon}>{a.icon}</Text>
+              <Text style={[styles.actionLabel, { color: a.color }]}>{a.label}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
 
-        {/* KPI */}
+        {/* KPI Grid */}
+        <Text style={styles.sectionLabel}>OVERVIEW</Text>
         <View style={styles.kpiGrid}>
-          <View style={styles.kpiCard}>
-            <Text style={styles.kpiLabel}>Total Stock</Text>
-            <Text style={styles.kpiValue}>{stats?.totalStock ?? '—'}</Text>
-          </View>
-
-          <View style={styles.kpiCard}>
-            <Text style={styles.kpiLabel}>Stock Value</Text>
-            <Text style={styles.kpiValue}>
-              {stats ? formatPKR(stats.stockValue) : '—'}
-            </Text>
-          </View>
-
-          <View style={styles.kpiCard}>
-            <Text style={styles.kpiLabel}>Low Stock</Text>
-            <Text style={[styles.kpiValue, { color: '#DC2626' }]}>
-              {stats?.lowStockCount ?? '—'}
-            </Text>
-          </View>
-
-          <View style={styles.kpiCard}>
-            <Text style={styles.kpiLabel}>3-mo Sales</Text>
-            <Text style={styles.kpiValue}>
-              {threeMonthSales ? formatPKR(threeMonthSales) : '—'}
-            </Text>
-          </View>
+          {KPI_CONFIG.map(k => (
+            <View key={k.key} style={[styles.kpiCard, { borderLeftColor: k.accent }]}>
+              <View style={[styles.kpiDot, { backgroundColor: k.bg }]}>
+                <View style={[styles.kpiDotInner, { backgroundColor: k.accent }]} />
+              </View>
+              <Text style={styles.kpiLabel}>{k.label}</Text>
+              <Text style={[styles.kpiValue, { color: k.accent }]}>
+                {kpiValues[k.key]}
+              </Text>
+            </View>
+          ))}
         </View>
 
         {/* Alerts */}
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Attention Needed</Text>
-          <Text style={styles.alert}>Low stock: {stats?.lowStockCount ?? 0}</Text>
-          <Text style={styles.alert}>Pending orders: {pendingOrdersCount ?? 0}</Text>
-          <Text style={styles.alert}>Reminders: {remindersCount ?? 0}</Text>
+        <Text style={styles.sectionLabel}>ATTENTION NEEDED</Text>
+        <View style={styles.alertsRow}>
+          {alertItems.map(a => (
+            <View key={a.label} style={[styles.alertCard, { backgroundColor: a.bg }]}>
+              <Text style={styles.alertIcon}>{a.icon}</Text>
+              <Text style={[styles.alertValue, { color: a.color }]}>{a.value}</Text>
+              <Text style={styles.alertLabel}>{a.label}</Text>
+            </View>
+          ))}
         </View>
 
         {/* Chart */}
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Monthly Sales</Text>
+        <Text style={styles.sectionLabel}>MONTHLY SALES</Text>
+        <View style={styles.chartCard}>
           {loading ? (
-            <ActivityIndicator />
+            <ActivityIndicator color="#2563EB" style={{ marginVertical: 24 }} />
           ) : !hasBarData ? (
-            <Text style={styles.muted}>No data</Text>
+            <Text style={styles.muted}>No sales data yet</Text>
           ) : (
-            <VictoryChart width={chartWidth} height={220} theme={VictoryTheme.material}>
-              <VictoryAxis />
-              <VictoryAxis dependentAxis />
-              <VictoryBar data={barData} style={{ data: { fill: '#2563EB' } }} />
+            <VictoryChart
+              width={chartWidth}
+              height={190}
+              padding={{ top: 10, bottom: 36, left: 52, right: 12 }}
+              domainPadding={{ x: 16 }}
+            >
+              <VictoryAxis
+                style={{
+                  axis: { stroke: '#E2E8F0' },
+                  tickLabels: { fontSize: 9, fill: '#94A3B8', fontWeight: '500' },
+                  grid: { stroke: 'transparent' },
+                }}
+              />
+              <VictoryAxis
+                dependentAxis
+                style={{
+                  axis: { stroke: 'transparent' },
+                  tickLabels: { fontSize: 9, fill: '#94A3B8' },
+                  grid: { stroke: '#F1F5F9', strokeDasharray: '4' },
+                }}
+              />
+              <VictoryBar
+                data={barData}
+                style={{
+                  data: {
+                    fill: '#2563EB',
+                    borderRadius: 4,
+                  },
+                }}
+                cornerRadius={{ top: 4 }}
+              />
             </VictoryChart>
           )}
         </View>
 
+        <View style={{ height: 16 }} />
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#F8FAFC' },
-  container: { padding: 16 },
+  safe: { flex: 1, backgroundColor: '#F1F5F9' },
+  container: { paddingHorizontal: 16, paddingTop: 8 },
 
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 12,
-    color: '#0F172A',
-  },
-
-  search: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    marginBottom: 16,
-    paddingHorizontal: 12,
-  },
-
-  searchInput: {
-    height: 40,
-    fontSize: 14,
-  },
-
-  kpiGrid: {
+  /* Header */
+  header: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    marginBottom: 14,
   },
-
-  kpiCard: {
-    width: '47%',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    padding: 12,
-  },
-
-  kpiLabel: {
+  greeting: {
     fontSize: 12,
     color: '#64748B',
+    fontWeight: '500',
+    letterSpacing: 0.3,
+    textTransform: 'uppercase',
+    marginBottom: 2,
   },
-
-  kpiValue: {
-    fontSize: 22,
+  headerTitle: {
+    fontSize: 26,
     fontWeight: '700',
     color: '#0F172A',
+    letterSpacing: -0.5,
+  },
+  datePill: {
+    backgroundColor: '#0F172A',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 20,
+  },
+  dateText: {
+    color: '#F8FAFC',
+    fontSize: 11,
+    fontWeight: '600',
+    letterSpacing: 0.2,
+  },
+
+  /* Search */
+  searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    height: 42,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  searchIcon: { fontSize: 14, marginRight: 8 },
+  searchInput: { flex: 1, fontSize: 13, color: '#0F172A', height: 42 },
+
+  /* Search Results */
+  searchResults: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    marginTop: -10,
+    marginBottom: 12,
+    overflow: 'hidden',
+  },
+  searchResultItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 9,
+    paddingHorizontal: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F1F5F9',
+  },
+  searchResultName: { fontSize: 13, color: '#0F172A', fontWeight: '500' },
+  searchResultSku: { fontSize: 11, color: '#94A3B8' },
+
+  /* Section Labels */
+  sectionLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#94A3B8',
+    letterSpacing: 1.2,
+    marginBottom: 8,
     marginTop: 4,
   },
 
-  card: {
-    marginTop: 20,
-    padding: 16,
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
+  /* Quick Actions */
+  actionsRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 18,
   },
-
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 12,
+  actionBtn: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderRadius: 12,
+    gap: 4,
   },
+  actionIcon: { fontSize: 18 },
+  actionLabel: { fontSize: 11, fontWeight: '600', letterSpacing: 0.1 },
 
-  alert: {
-    fontSize: 14,
-    marginBottom: 6,
-  },
-
-  muted: {
-    color: '#94A3B8',
-  },
-
-  actions: {
+  /* KPI */
+  kpiGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: 10,
+    marginBottom: 18,
+  },
+  kpiCard: {
+    width: '47.5%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 14,
+    padding: 12,
+    borderLeftWidth: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  kpiDot: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
+  },
+  kpiDotInner: { width: 8, height: 8, borderRadius: 4 },
+  kpiLabel: {
+    fontSize: 11,
+    color: '#64748B',
+    fontWeight: '500',
+    letterSpacing: 0.2,
+    marginBottom: 2,
+  },
+  kpiValue: {
+    fontSize: 20,
+    fontWeight: '700',
+    letterSpacing: -0.5,
   },
 
-  action: {
-    backgroundColor: '#F1F5F9',
+  /* Alerts */
+  alertsRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 18,
+  },
+  alertCard: {
+    flex: 1,
+    borderRadius: 12,
     padding: 10,
-    borderRadius: 10,
+    alignItems: 'center',
+  },
+  alertIcon: { fontSize: 16, marginBottom: 4 },
+  alertValue: { fontSize: 20, fontWeight: '700', letterSpacing: -0.5 },
+  alertLabel: { fontSize: 9, color: '#64748B', fontWeight: '600', textAlign: 'center', marginTop: 2, letterSpacing: 0.2 },
+
+  /* Chart */
+  chartCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    paddingTop: 12,
+    paddingHorizontal: 4,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  muted: {
+    color: '#94A3B8',
+    fontSize: 13,
+    textAlign: 'center',
+    paddingVertical: 24,
   },
 });
