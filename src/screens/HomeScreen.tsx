@@ -239,10 +239,12 @@ export default function HomeScreen() {
               <View style={[styles.kpiDot, { backgroundColor: k.bg }]}>
                 <View style={[styles.kpiDotInner, { backgroundColor: k.accent }]} />
               </View>
-              <Text style={styles.kpiLabel}>{k.label}</Text>
-              <Text style={[styles.kpiValue, { color: k.accent }]}>
-                {kpiValues[k.key]}
-              </Text>
+              <View>
+                <Text style={styles.kpiLabel}>{k.label}</Text>
+                <Text style={[styles.kpiValue, { color: k.accent }]}>
+                  {kpiValues[k.key]}
+                </Text>
+              </View>
             </View>
           ))}
         </View>
@@ -253,8 +255,10 @@ export default function HomeScreen() {
           {alertItems.map(a => (
             <View key={a.label} style={[styles.alertCard, { backgroundColor: a.bg }]}>
               <Text style={styles.alertIcon}>{a.icon}</Text>
-              <Text style={[styles.alertValue, { color: a.color }]}>{a.value}</Text>
-              <Text style={styles.alertLabel}>{a.label}</Text>
+              <View>
+                <Text style={[styles.alertValue, { color: a.color }]}>{a.value}</Text>
+                <Text style={styles.alertLabel}>{a.label}</Text>
+              </View>
             </View>
           ))}
         </View>
@@ -417,15 +421,19 @@ const styles = StyleSheet.create({
   kpiGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
-    marginBottom: 18,
+    gap: 8,
+    marginBottom: 14,
   },
   kpiCard: {
     width: '47.5%',
     backgroundColor: '#FFFFFF',
-    borderRadius: 14,
-    padding: 12,
+    borderRadius: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
     borderLeftWidth: 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
@@ -433,42 +441,44 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   kpiDot: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
+    width: 28,
+    height: 28,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 8,
+    flexShrink: 0,
   },
-  kpiDotInner: { width: 8, height: 8, borderRadius: 4 },
+  kpiDotInner: { width: 10, height: 10, borderRadius: 5 },
   kpiLabel: {
-    fontSize: 11,
+    fontSize: 10,
     color: '#64748B',
     fontWeight: '500',
-    letterSpacing: 0.2,
-    marginBottom: 2,
+    letterSpacing: 0.1,
   },
   kpiValue: {
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: '700',
-    letterSpacing: -0.5,
+    letterSpacing: -0.3,
   },
 
   /* Alerts */
   alertsRow: {
     flexDirection: 'row',
     gap: 8,
-    marginBottom: 18,
+    marginBottom: 14,
   },
   alertCard: {
     flex: 1,
-    borderRadius: 12,
-    padding: 10,
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 6,
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: 6,
   },
-  alertIcon: { fontSize: 16, marginBottom: 4 },
-  alertValue: { fontSize: 20, fontWeight: '700', letterSpacing: -0.5 },
-  alertLabel: { fontSize: 9, color: '#64748B', fontWeight: '600', textAlign: 'center', marginTop: 2, letterSpacing: 0.2 },
+  alertIcon: { fontSize: 13 },
+  alertValue: { fontSize: 15, fontWeight: '700', letterSpacing: -0.3 },
+  alertLabel: { fontSize: 9, color: '#64748B', fontWeight: '600', flexShrink: 1, letterSpacing: 0.1 },
 
   /* Chart */
   chartCard: {
