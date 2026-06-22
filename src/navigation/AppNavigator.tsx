@@ -106,15 +106,13 @@ export default function AppNavigator() {
               name="Home"
               component={HomeScreen}
               options={{
-                title: 'Mobile Inventory Dashboard',
+                title: 'Mobile Phone Management',
                 headerRight: () => (
                   <TouchableOpacity
                     onPress={() => signOut()}
                     style={{ paddingHorizontal: 10, paddingVertical: 4 }}
                   >
-                    <Text style={{ color: '#DC2626', fontWeight: '600', fontSize: 14 }}>
-                      Sign Out
-                    </Text>
+                    <Text style={{ fontSize: 20 }}>🚪</Text>
                   </TouchableOpacity>
                 ),
               }}
