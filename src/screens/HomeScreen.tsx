@@ -398,39 +398,40 @@ const styles = StyleSheet.create({
   /* Quick Actions */
   actionsRow: {
     flexDirection: 'row',
-    gap: 8,
     marginBottom: 18,
   },
   actionBtn: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 10,
     borderRadius: 12,
-    gap: 4,
+    marginHorizontal: 4,
   },
-  actionIcon: { fontSize: 18 },
-  actionLabel: { fontSize: 11, fontWeight: '600', letterSpacing: 0.1 },
+  actionIcon: { fontSize: 18, marginBottom: 4 },
+  actionLabel: { fontSize: 11, fontWeight: '600', letterSpacing: 0.1, textAlign: 'center' },
 
   /* KPI */
   kpiGrid: {
     flexDirection: 'row',
-    gap: 8,
     marginBottom: 14,
   },
   kpiCard: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 10,
     borderRadius: 12,
-    gap: 2,
+    marginHorizontal: 4,
   },
-  kpiIcon: { fontSize: 18, marginBottom: 2 },
+  kpiIcon: { fontSize: 18, marginBottom: 3 },
   kpiLabel: {
     fontSize: 10,
     color: '#64748B',
     fontWeight: '600',
     letterSpacing: 0.1,
     textAlign: 'center',
+    marginTop: 2,
   },
   kpiValue: {
     fontSize: 14,
