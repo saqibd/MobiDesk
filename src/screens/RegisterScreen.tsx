@@ -1,4 +1,5 @@
 // src/screens/RegisterScreen.tsx
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import {
   View,
@@ -16,6 +17,28 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../navigation/AppNavigator';
 import { registerWithEmail, loginWithGoogle } from '../services/authService';
+=======
+import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useState } from 'react';
+import {
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import type { RootStackParamList } from '../navigation/AppNavigator';
+import { COMPANY } from '../constants/companyInfo';
+import { Brand } from '../constants/brand';
+import { loginWithGoogle, registerWithEmail } from '../services/authService';
+import { authStyles as styles } from '../styles/authStyles';
+>>>>>>> 8f32440 (Initial app update)
 
 type NavProp = NativeStackNavigationProp<RootStackParamList, 'Register'>;
 
@@ -68,6 +91,7 @@ export default function RegisterScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+<<<<<<< HEAD
         <Image
           source={require('../../assets/images/logo.png')}
           style={styles.logo}
@@ -145,6 +169,97 @@ export default function RegisterScreen() {
             <Text style={styles.googleBtnText}>🔵  Continue with Google</Text>
           </TouchableOpacity>
         )}
+=======
+        <View style={styles.brandBlock}>
+          <Image
+            source={require('../../assets/images/logo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+          <Text style={styles.brandName}>{COMPANY.name}</Text>
+          <Text style={styles.subtitle}>{COMPANY.tagline}</Text>
+        </View>
+
+        <View style={styles.formCard}>
+          <Text style={styles.title}>Create account</Text>
+          <Text style={[styles.subtitle, { marginBottom: 4 }]}>
+            Get started with {COMPANY.name}
+          </Text>
+
+          {!!error && (
+            <View style={styles.errorBox}>
+              <Text style={styles.errorText}>{error}</Text>
+            </View>
+          )}
+
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="you@example.com"
+            placeholderTextColor={Brand.textSubtle}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+            editable={!busy}
+          />
+
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Min. 6 characters"
+            placeholderTextColor={Brand.textSubtle}
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+            editable={!busy}
+          />
+
+          <Text style={styles.label}>Confirm password</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Re-enter password"
+            placeholderTextColor={Brand.textSubtle}
+            secureTextEntry
+            value={confirm}
+            onChangeText={setConfirm}
+            editable={!busy}
+            onSubmitEditing={handleRegister}
+            returnKeyType="done"
+          />
+
+          <TouchableOpacity
+            style={[styles.primaryBtn, busy && styles.btnDisabled]}
+            onPress={handleRegister}
+            disabled={busy}
+          >
+            {busy ? (
+              <ActivityIndicator color="#FFFFFF" />
+            ) : (
+              <Text style={styles.primaryBtnText}>Create account</Text>
+            )}
+          </TouchableOpacity>
+
+          {Platform.OS === 'web' && (
+            <>
+              <View style={styles.dividerRow}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerText}>or</Text>
+                <View style={styles.dividerLine} />
+              </View>
+
+              <TouchableOpacity
+                style={[styles.googleBtn, busy && styles.btnDisabled]}
+                onPress={handleGoogleLogin}
+                disabled={busy}
+              >
+                <AntDesign name="google" size={18} color="#4285F4" />
+                <Text style={styles.googleBtnText}>Continue with Google</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
+>>>>>>> 8f32440 (Initial app update)
 
         <TouchableOpacity
           style={styles.linkRow}
@@ -179,6 +294,7 @@ function friendlyError(code: string, raw?: string): string {
       return `Sign-in failed (${code ?? raw ?? 'unknown'}). Check Firebase Console → Authentication.`;
   }
 }
+<<<<<<< HEAD
 
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: '#F8FAFC' },
@@ -262,3 +378,5 @@ const styles = StyleSheet.create({
   linkText: { fontSize: 13, color: '#64748B' },
   linkAccent: { color: '#2563EB', fontWeight: '700' },
 });
+=======
+>>>>>>> 8f32440 (Initial app update)

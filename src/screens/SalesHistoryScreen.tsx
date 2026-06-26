@@ -1,4 +1,5 @@
 // src/screens/SalesHistoryScreen.tsx
+<<<<<<< HEAD
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   View,
@@ -22,6 +23,33 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { db } from '../firebaseConfig';
 import type { Sale } from '../services/salesService';
 import type { RootStackParamList, SaleDetailParams } from '../navigation/AppNavigator';
+=======
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {
+    collection,
+    getDocs,
+    orderBy,
+    query,
+} from 'firebase/firestore';
+import { useEffect, useMemo, useState } from 'react';
+import {
+    ActivityIndicator,
+    FlatList,
+    Keyboard,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from 'react-native';
+import { Brand, Inter } from '../constants/brand';
+import { db } from '../firebaseConfig';
+import type { RootStackParamList, SaleDetailParams } from '../navigation/AppNavigator';
+import type { Sale } from '../services/salesService';
+import { screenStyles as shared } from '../styles/screenStyles';
+>>>>>>> 8f32440 (Initial app update)
 
 type SaleWithId = Sale & { id: string };
 type NavProp = NativeStackNavigationProp<RootStackParamList, 'SalesHistory'>;
@@ -63,10 +91,22 @@ export default function SalesHistoryScreen() {
     loadSales();
   }, []);
 
+<<<<<<< HEAD
   function formatDate(ts: any) {
     if (!ts) return '';
     const date =
       typeof ts.toDate === 'function' ? ts.toDate() : new Date(ts);
+=======
+  function toDate(value: any): Date {
+    if (!value) return new Date(0);
+    if (typeof value.toDate === 'function') return value.toDate();
+    return new Date(value as string | number);
+  }
+
+  function formatDate(ts: any) {
+    if (!ts) return '';
+    const date = toDate(ts);
+>>>>>>> 8f32440 (Initial app update)
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
   }
 
@@ -74,15 +114,23 @@ export default function SalesHistoryScreen() {
     if (!ts) return undefined;
     if (typeof ts.toDate === 'function') return ts.toDate().getTime();
     if (ts instanceof Date) return ts.getTime();
+<<<<<<< HEAD
+=======
+    if (typeof ts === 'number') return ts;
+>>>>>>> 8f32440 (Initial app update)
     return undefined;
   }
 
   function isWithinFilter(sale: SaleWithId, filterType: FilterType) {
     if (!sale.createdAt) return false;
+<<<<<<< HEAD
     const saleDate =
       typeof sale.createdAt.toDate === 'function'
         ? sale.createdAt.toDate()
         : new Date(sale.createdAt);
+=======
+    const saleDate = toDate(sale.createdAt);
+>>>>>>> 8f32440 (Initial app update)
     const now = new Date();
     if (filterType === 'ALL') return true;
     if (filterType === 'TODAY') {
@@ -116,8 +164,13 @@ export default function SalesHistoryScreen() {
     const data = [...filteredBySearch];
     data.sort((a, b) => {
       if (sortField === 'date') {
+<<<<<<< HEAD
         const aDate = typeof a.createdAt?.toDate === 'function' ? a.createdAt.toDate() : new Date(a.createdAt || 0);
         const bDate = typeof b.createdAt?.toDate === 'function' ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+=======
+        const aDate = toDate(a.createdAt);
+        const bDate = toDate(b.createdAt);
+>>>>>>> 8f32440 (Initial app update)
         const diff = aDate.getTime() - bDate.getTime();
         return sortDirection === 'asc' ? diff : -diff;
       }
@@ -134,15 +187,28 @@ export default function SalesHistoryScreen() {
     let count = 0;
     const productMap: Record<string, { productName: string; quantity: number; revenue: number }> = {};
     filteredSales.forEach((sale) => {
+<<<<<<< HEAD
+=======
+      const productId = sale.productId;
+      if (!productId) return;
+>>>>>>> 8f32440 (Initial app update)
       const total = Number(sale.total) || 0;
       const qty = Number(sale.quantity) || 0;
       revenue += total;
       count += 1;
+<<<<<<< HEAD
       if (!productMap[sale.productId]) {
         productMap[sale.productId] = { productName: sale.productName, quantity: 0, revenue: 0 };
       }
       productMap[sale.productId].quantity += qty;
       productMap[sale.productId].revenue += total;
+=======
+      if (!productMap[productId]) {
+        productMap[productId] = { productName: sale.productName ?? '', quantity: 0, revenue: 0 };
+      }
+      productMap[productId].quantity += qty;
+      productMap[productId].revenue += total;
+>>>>>>> 8f32440 (Initial app update)
     });
     const top = Object.values(productMap).sort((a, b) => b.quantity - a.quantity).slice(0, 3);
     return { totalRevenue: revenue, totalSalesCount: count, topProducts: top };
@@ -186,7 +252,14 @@ export default function SalesHistoryScreen() {
           <Text style={styles.detail}>Phone: {item.customerPhone}</Text>
         </View>
       ) : null}
+<<<<<<< HEAD
       <Text style={styles.tapHint}>Tap to view details & reprint →</Text>
+=======
+      <View style={styles.tapHintRow}>
+        <Text style={styles.tapHint}>View details & reprint</Text>
+        <MaterialIcons name="chevron-right" size={18} color={Brand.primary} />
+      </View>
+>>>>>>> 8f32440 (Initial app update)
     </TouchableOpacity>
   );
 
@@ -210,8 +283,13 @@ export default function SalesHistoryScreen() {
   if (loading) {
     return (
       <View style={styles.center}>
+<<<<<<< HEAD
         <ActivityIndicator size="large" />
         <Text style={{ marginTop: 8 }}>Loading sales...</Text>
+=======
+        <ActivityIndicator size="large" color={Brand.primary} />
+        <Text style={styles.loadingText}>Loading sales…</Text>
+>>>>>>> 8f32440 (Initial app update)
       </View>
     );
   }
@@ -219,7 +297,12 @@ export default function SalesHistoryScreen() {
   if (!loading && filteredSales.length === 0) {
     return (
       <View style={styles.container}>
+<<<<<<< HEAD
         <Text style={styles.title}>Sales History</Text>
+=======
+        <Text style={shared.title}>Sales history</Text>
+        <Text style={shared.subtitle}>Review past transactions and revenue.</Text>
+>>>>>>> 8f32440 (Initial app update)
         <FilterBar filter={filter} setFilter={setFilter} />
         <SearchAndSortBar
           search={search}
@@ -231,7 +314,12 @@ export default function SalesHistoryScreen() {
         />
         <DashboardSummary totalRevenue={0} totalSalesCount={0} topProducts={[]} />
         <View style={styles.centerBody}>
+<<<<<<< HEAD
           <Text>No sales for this period.</Text>
+=======
+          <MaterialIcons name="receipt-long" size={40} color={Brand.border} style={{ marginBottom: 12 }} />
+          <Text style={shared.emptyTitle}>No sales for this period</Text>
+>>>>>>> 8f32440 (Initial app update)
         </View>
       </View>
     );
@@ -239,7 +327,12 @@ export default function SalesHistoryScreen() {
 
   return (
     <View style={styles.container}>
+<<<<<<< HEAD
       <Text style={styles.title}>Sales History</Text>
+=======
+      <Text style={shared.title}>Sales history</Text>
+      <Text style={shared.subtitle}>Review past transactions and revenue.</Text>
+>>>>>>> 8f32440 (Initial app update)
       <FilterBar filter={filter} setFilter={setFilter} />
       <SearchAndSortBar
         search={search}
@@ -298,6 +391,7 @@ type SearchAndSortBarProps = {
 function SearchAndSortBar({ search, setSearch, sortField, sortDirection, toggleSortField, sortLabel }: SearchAndSortBarProps) {
   return (
     <View style={styles.searchSortContainer}>
+<<<<<<< HEAD
       <TextInput
         placeholder="Search by product or customer"
         placeholderTextColor="gray"
@@ -308,6 +402,22 @@ function SearchAndSortBar({ search, setSearch, sortField, sortDirection, toggleS
       <View style={styles.hideKeyboardRow}>
         <Button title="Hide Keyboard" onPress={() => Keyboard.dismiss()} />
       </View>
+=======
+      <View style={shared.searchBar}>
+        <MaterialIcons name="search" size={20} color={Brand.textSubtle} style={{ marginRight: 10 }} />
+        <TextInput
+          placeholder="Search by product or customer"
+          placeholderTextColor={Brand.textSubtle}
+          style={shared.searchInput}
+          value={search}
+          onChangeText={setSearch}
+        />
+      </View>
+      <TouchableOpacity style={styles.hideKeyboardBtn} onPress={() => Keyboard.dismiss()}>
+        <MaterialIcons name="keyboard-hide" size={16} color={Brand.textMuted} />
+        <Text style={styles.hideKeyboardText}>Hide keyboard</Text>
+      </TouchableOpacity>
+>>>>>>> 8f32440 (Initial app update)
       <View style={styles.sortButtonsRow}>
         <TouchableOpacity
           style={[styles.sortButton, sortField === 'date' && styles.sortButtonActive]}
@@ -364,6 +474,7 @@ function DashboardSummary({ totalRevenue, totalSalesCount, topProducts }: Dashbo
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
   container: { flex: 1, padding: 16, backgroundColor: '#ffffff' },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 16, backgroundColor: '#ffffff' },
   centerBody: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 16 },
@@ -420,4 +531,99 @@ const styles = StyleSheet.create({
   topProductName: { fontSize: 13, fontWeight: '500' },
   topProductDetail: { fontSize: 12, color: '#555' },
   hideKeyboardRow: { alignItems: 'flex-end', marginBottom: 4 },
+=======
+  container: { flex: 1, padding: 16, backgroundColor: Brand.background },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: Brand.background,
+  },
+  centerBody: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 16 },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    fontFamily: Inter.medium,
+    color: Brand.textMuted,
+  },
+  card: {
+    padding: 14,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: Brand.border,
+    marginBottom: 10,
+    backgroundColor: Brand.surface,
+  },
+  row: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 2 },
+  productName: { fontFamily: Inter.semibold, fontSize: 15, color: Brand.text, flex: 1, marginRight: 8 },
+  amount: { fontFamily: Inter.bold, fontSize: 15, color: Brand.primary },
+  detail: { fontSize: 12, fontFamily: Inter.regular, color: Brand.textMuted },
+  tapHintRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 2,
+    marginTop: 8,
+  },
+  tapHint: { fontSize: 12, fontFamily: Inter.semibold, color: Brand.primary },
+  filterBar: { flexDirection: 'row', marginBottom: 12, gap: 8 },
+  filterButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: Brand.border,
+    backgroundColor: Brand.surface,
+  },
+  filterButtonActive: { borderColor: Brand.primary, backgroundColor: Brand.primaryBg },
+  filterButtonText: { fontSize: 12, fontFamily: Inter.medium, color: Brand.textMuted },
+  filterButtonTextActive: { color: Brand.primary, fontFamily: Inter.semibold },
+  searchSortContainer: { marginBottom: 12 },
+  hideKeyboardBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    gap: 4,
+    marginBottom: 8,
+    paddingVertical: 4,
+  },
+  hideKeyboardText: { fontSize: 12, fontFamily: Inter.medium, color: Brand.textMuted },
+  sortButtonsRow: { flexDirection: 'row', gap: 8 },
+  sortButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: Brand.border,
+    backgroundColor: Brand.surface,
+  },
+  sortButtonActive: { borderColor: Brand.primary, backgroundColor: Brand.primaryBg },
+  sortButtonText: { fontSize: 12, fontFamily: Inter.medium, color: Brand.textMuted },
+  sortButtonTextActive: { color: Brand.primary, fontFamily: Inter.semibold },
+  dashboardContainer: { marginBottom: 14 },
+  summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 10 },
+  summaryCard: {
+    flex: 1,
+    padding: 14,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: Brand.border,
+    backgroundColor: Brand.surface,
+  },
+  summaryLabel: { fontSize: 12, fontFamily: Inter.medium, color: Brand.textMuted },
+  summaryValue: { fontSize: 18, fontFamily: Inter.bold, color: Brand.text, marginTop: 4 },
+  topProductsCard: {
+    padding: 14,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: Brand.border,
+    backgroundColor: Brand.surface,
+  },
+  topProductsTitle: { fontSize: 14, fontFamily: Inter.semibold, color: Brand.text, marginBottom: 6 },
+  topProductsEmpty: { fontSize: 12, fontFamily: Inter.regular, color: Brand.textSubtle },
+  topProductRow: { marginTop: 6 },
+  topProductName: { fontSize: 13, fontFamily: Inter.semibold, color: Brand.text },
+  topProductDetail: { fontSize: 12, fontFamily: Inter.regular, color: Brand.textMuted, marginTop: 2 },
+>>>>>>> 8f32440 (Initial app update)
 });

@@ -1,4 +1,5 @@
 // src/screens/InventoryScreen.tsx
+<<<<<<< HEAD
 import React, { useEffect, useState, useMemo } from 'react';
 import {
   View,
@@ -14,6 +15,26 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../navigation/AppNavigator';
 import { getProducts, type Product } from '../services/productService';
+=======
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import type { RootStackParamList } from '../navigation/AppNavigator';
+import { Brand, Inter } from '../constants/brand';
+import { getProducts, type Product } from '../services/productService';
+import { screenStyles as shared } from '../styles/screenStyles';
+>>>>>>> 8f32440 (Initial app update)
 
 type NavProp = NativeStackNavigationProp<RootStackParamList, 'Inventory'>;
 
@@ -109,7 +130,11 @@ function ProductListItem({
           <Text style={styles.editBtnText}>Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.shareBtn} onPress={() => onShare(product)} activeOpacity={0.7}>
+<<<<<<< HEAD
           <Text style={styles.shareBtnText}>📲</Text>
+=======
+          <MaterialIcons name="share" size={18} color={Brand.primary} />
+>>>>>>> 8f32440 (Initial app update)
         </TouchableOpacity>
       </View>
     </View>
@@ -148,9 +173,18 @@ function BrandGroup({
           </View>
         </View>
         {/* Chevron rotates visually: ▼ open, ▶ closed */}
+<<<<<<< HEAD
         <Text style={[styles.groupChevron, !open && styles.groupChevronClosed]}>
           ▼
         </Text>
+=======
+        <MaterialIcons
+          name="keyboard-arrow-down"
+          size={22}
+          color={Brand.primary}
+          style={!open ? styles.groupChevronClosed : undefined}
+        />
+>>>>>>> 8f32440 (Initial app update)
       </TouchableOpacity>
 
       {/* Divider always visible */}
@@ -217,6 +251,7 @@ const InventoryScreen: React.FC = () => {
 
   return (
     <ScrollView
+<<<<<<< HEAD
       contentContainerStyle={styles.container}
       keyboardShouldPersistTaps="handled"
     >
@@ -233,6 +268,22 @@ const InventoryScreen: React.FC = () => {
           style={styles.searchInput}
           placeholder="Search products by name or brand"
           placeholderTextColor="#94A3B8"
+=======
+      contentContainerStyle={shared.container}
+      keyboardShouldPersistTaps="handled"
+    >
+      <Text style={shared.title}>Inventory</Text>
+      <Text style={shared.subtitle}>
+        Manage products, stock levels, and pricing.
+      </Text>
+
+      <View style={shared.searchBar}>
+        <MaterialIcons name="search" size={20} color={Brand.textSubtle} style={{ marginRight: 10 }} />
+        <TextInput
+          style={shared.searchInput}
+          placeholder="Search products by name or brand"
+          placeholderTextColor={Brand.textSubtle}
+>>>>>>> 8f32440 (Initial app update)
           value={search}
           onChangeText={setSearch}
           clearButtonMode="while-editing"
@@ -240,6 +291,7 @@ const InventoryScreen: React.FC = () => {
         />
       </View>
 
+<<<<<<< HEAD
       {/* Actions */}
       <TouchableOpacity style={styles.primaryButton} onPress={onAddProduct}>
         <Text style={styles.primaryButtonText}>+ Add Product</Text>
@@ -277,6 +329,40 @@ const InventoryScreen: React.FC = () => {
             </>
           ) : (
             <Text style={styles.emptyTitle}>No products found for this search.</Text>
+=======
+      <TouchableOpacity style={shared.primaryButton} onPress={onAddProduct}>
+        <Text style={shared.primaryButtonText}>+ Add product</Text>
+      </TouchableOpacity>
+
+      <View style={shared.secondaryRow}>
+        <TouchableOpacity style={shared.outlineButton} onPress={onScanBarcode}>
+          <MaterialIcons name="qr-code-scanner" size={18} color={Brand.text} />
+          <Text style={shared.outlineButtonText}>Scan barcode</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={shared.outlineButton} onPress={onImportCsv}>
+          <MaterialIcons name="upload-file" size={18} color={Brand.text} />
+          <Text style={shared.outlineButtonText}>Import CSV</Text>
+        </TouchableOpacity>
+      </View>
+
+      {loading ? (
+        <View style={shared.loadingRow}>
+          <ActivityIndicator size="small" color={Brand.primary} />
+          <Text style={shared.loadingText}>Loading inventory…</Text>
+        </View>
+      ) : groups.length === 0 ? (
+        <View style={shared.emptyState}>
+          {products.length === 0 ? (
+            <>
+              <MaterialIcons name="inventory-2" size={40} color={Brand.border} style={{ marginBottom: 12 }} />
+              <Text style={shared.emptyTitle}>No products yet</Text>
+              <Text style={shared.emptyHint}>
+                Tap &quot;Add product&quot; or import a CSV file to get started.
+              </Text>
+            </>
+          ) : (
+            <Text style={shared.emptyTitle}>No products found for this search.</Text>
+>>>>>>> 8f32440 (Initial app update)
           )}
         </View>
       ) : (
@@ -297,6 +383,7 @@ const InventoryScreen: React.FC = () => {
 export default InventoryScreen;
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
   container: {
     padding: 16,
     paddingBottom: 40,
@@ -377,6 +464,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: '#E2E8F0',
+=======
+  group: {
+    marginBottom: 14,
+    borderRadius: 14,
+    backgroundColor: Brand.surface,
+    borderWidth: 1,
+    borderColor: Brand.border,
+>>>>>>> 8f32440 (Initial app update)
     overflow: 'hidden',
   },
   groupHeader: {
@@ -385,7 +480,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 14,
     paddingHorizontal: 16,
+<<<<<<< HEAD
     backgroundColor: '#F1F5F9',
+=======
+    backgroundColor: Brand.borderLight,
+>>>>>>> 8f32440 (Initial app update)
   },
   groupHeaderLeft: {
     flexDirection: 'row',
@@ -394,18 +493,27 @@ const styles = StyleSheet.create({
   },
   groupBrand: {
     fontSize: 15,
+<<<<<<< HEAD
     fontWeight: '800',
     color: '#0F172A',
     letterSpacing: 0.2,
   },
   groupBadge: {
     backgroundColor: '#E2E8F0',
+=======
+    fontFamily: Inter.bold,
+    color: Brand.text,
+  },
+  groupBadge: {
+    backgroundColor: Brand.border,
+>>>>>>> 8f32440 (Initial app update)
     borderRadius: 20,
     paddingHorizontal: 9,
     paddingVertical: 3,
   },
   groupBadgeText: {
     fontSize: 11,
+<<<<<<< HEAD
     fontWeight: '600',
     color: '#475569',
   },
@@ -413,18 +521,27 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#2563EB',
     fontWeight: '700',
+=======
+    fontFamily: Inter.semibold,
+    color: Brand.textMuted,
+>>>>>>> 8f32440 (Initial app update)
   },
   groupChevronClosed: {
     transform: [{ rotate: '-90deg' }],
   },
   groupDivider: {
     height: 1,
+<<<<<<< HEAD
     backgroundColor: '#E2E8F0',
+=======
+    backgroundColor: Brand.border,
+>>>>>>> 8f32440 (Initial app update)
   },
   groupItems: {
     padding: 10,
     gap: 8,
   },
+<<<<<<< HEAD
 
   // Product card
   card: {
@@ -433,6 +550,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: '#E2E8F0',
+=======
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Brand.background,
+    borderWidth: 1,
+    borderColor: Brand.border,
+>>>>>>> 8f32440 (Initial app update)
     borderRadius: 12,
     padding: 12,
     marginBottom: 8,
@@ -441,15 +566,24 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 10,
+<<<<<<< HEAD
     backgroundColor: '#E5E7EB',
+=======
+    backgroundColor: Brand.primaryBg,
+>>>>>>> 8f32440 (Initial app update)
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
   },
   avatarText: {
     fontSize: 15,
+<<<<<<< HEAD
     fontWeight: '700',
     color: '#374151',
+=======
+    fontFamily: Inter.bold,
+    color: Brand.primary,
+>>>>>>> 8f32440 (Initial app update)
   },
   cardInfo: {
     flex: 1,
@@ -463,24 +597,43 @@ const styles = StyleSheet.create({
   },
   cardName: {
     fontSize: 14,
+<<<<<<< HEAD
     fontWeight: '600',
     color: '#0F172A',
     flexShrink: 1,
   },
   lowStockBadge: {
     backgroundColor: '#FEE2E2',
+=======
+    fontFamily: Inter.semibold,
+    color: Brand.text,
+    flexShrink: 1,
+  },
+  lowStockBadge: {
+    backgroundColor: Brand.dangerBg,
+>>>>>>> 8f32440 (Initial app update)
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 6,
   },
   lowStockText: {
     fontSize: 10,
+<<<<<<< HEAD
     fontWeight: '600',
     color: '#DC2626',
   },
   cardSub: {
     fontSize: 12,
     color: '#64748B',
+=======
+    fontFamily: Inter.semibold,
+    color: Brand.danger,
+  },
+  cardSub: {
+    fontSize: 12,
+    fontFamily: Inter.regular,
+    color: Brand.textMuted,
+>>>>>>> 8f32440 (Initial app update)
   },
   cardActions: {
     flexDirection: 'row',
@@ -492,6 +645,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 8,
     borderWidth: 1,
+<<<<<<< HEAD
     borderColor: '#E2E8F0',
     backgroundColor: '#F8FAFC',
   },
@@ -537,5 +691,21 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#94A3B8',
     textAlign: 'center',
+=======
+    borderColor: Brand.border,
+    backgroundColor: Brand.surface,
+  },
+  editBtnText: {
+    fontSize: 12,
+    fontFamily: Inter.semibold,
+    color: Brand.primary,
+  },
+  shareBtn: {
+    padding: 6,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Brand.border,
+    backgroundColor: Brand.surface,
+>>>>>>> 8f32440 (Initial app update)
   },
 });

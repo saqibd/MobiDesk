@@ -1,15 +1,37 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+<<<<<<< HEAD
     "strict": true,
     "paths": {
       "@/*": [
         "./*"
       ]
+=======
+    "jsx": "react-native",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+>>>>>>> 8f32440 (Initial app update)
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx"
   ]
+<<<<<<< HEAD
+=======
+  ,
+  "exclude": [
+    "node_modules",
+    ".expo",
+    "dist"
+  ]
+>>>>>>> 8f32440 (Initial app update)
 }

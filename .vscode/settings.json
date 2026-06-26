@@ -3,5 +3,22 @@
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
+<<<<<<< HEAD
+=======
+  },
+  "typescript.disableAutomaticTypeAcquisition": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.watcherExclude": {
+    "**/node_modules/*": true,
+    "**/.expo/*": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.expo": true
+  },
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.expo": true
+>>>>>>> 8f32440 (Initial app update)
   }
 }

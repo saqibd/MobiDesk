@@ -1,5 +1,6 @@
 // src/services/salesService.ts
 import {
+<<<<<<< HEAD
   collection,
   addDoc,
   getDocs,
@@ -10,6 +11,18 @@ import {
   Timestamp,
   DocumentData,
   serverTimestamp,
+=======
+    addDoc,
+    collection,
+    DocumentData,
+    getDocs,
+    limit,
+    orderBy,
+    query,
+    serverTimestamp,
+    Timestamp,
+    where,
+>>>>>>> 8f32440 (Initial app update)
 } from 'firebase/firestore';
 import { db } from '../firebase';
 
@@ -101,3 +114,101 @@ export async function getRecentSales(limitCount = 3): Promise<Sale[]> {
   });
   return result;
 }
+<<<<<<< HEAD
+=======
+
+export async function getSalesForProduct(productId: string, limitCount = 5): Promise<Sale[]> {
+  const q = query(
+    salesCol,
+    where('productId', '==', productId),
+    orderBy('createdAt', 'desc'),
+    limit(limitCount)
+  );
+  const snapshot = await getDocs(q);
+  const result: Sale[] = [];
+  snapshot.forEach(docSnap => {
+    const data = docSnap.data() as DocumentData;
+    result.push({
+      id: docSnap.id,
+      productId: data.productId,
+      productName: data.productName,
+      quantity: data.quantity,
+      total: data.total,
+      customerPhone: data.customerPhone,
+      customerName: data.customerName,
+      createdAt: data.createdAt as Timestamp,
+    });
+  });
+  return result;
+}
+
+export type MonthlyRevenue = {
+  month: string;
+  total: number;
+};
+
+export type MonthlyUnits = {
+  month: string;
+  units: number;
+};
+
+export async function getMonthlyRevenueForProduct(productId: string, months = 6): Promise<MonthlyRevenue[]> {
+  const MONTH_LABELS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const now = new Date();
+  const startDate = new Date(now.getFullYear(), now.getMonth() - (months - 1), 1);
+  const q = query(
+    salesCol,
+    where('productId', '==', productId),
+    where('createdAt', '>=', Timestamp.fromDate(startDate))
+  );
+  const snapshot = await getDocs(q);
+
+  const totalsMap: Record<string, number> = {};
+  snapshot.forEach(docSnap => {
+    const data = docSnap.data() as DocumentData;
+    const ts: Timestamp | undefined = data.createdAt;
+    if (!ts) return;
+    const d = ts.toDate();
+    const key = `${d.getFullYear()}-${d.getMonth()}`;
+    totalsMap[key] = (totalsMap[key] ?? 0) + (typeof data.total === 'number' ? data.total : 0);
+  });
+
+  const result: MonthlyRevenue[] = [];
+  for (let i = months - 1; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const key = `${d.getFullYear()}-${d.getMonth()}`;
+    result.push({ month: MONTH_LABELS[d.getMonth()], total: totalsMap[key] ?? 0 });
+  }
+  return result;
+}
+
+export async function getMonthlyUnitsForProduct(productId: string, months = 6): Promise<MonthlyUnits[]> {
+  const MONTH_LABELS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const now = new Date();
+  const startDate = new Date(now.getFullYear(), now.getMonth() - (months - 1), 1);
+  const q = query(
+    salesCol,
+    where('productId', '==', productId),
+    where('createdAt', '>=', Timestamp.fromDate(startDate))
+  );
+  const snapshot = await getDocs(q);
+
+  const unitsMap: Record<string, number> = {};
+  snapshot.forEach(docSnap => {
+    const data = docSnap.data() as DocumentData;
+    const ts: Timestamp | undefined = data.createdAt;
+    if (!ts) return;
+    const d = ts.toDate();
+    const key = `${d.getFullYear()}-${d.getMonth()}`;
+    unitsMap[key] = (unitsMap[key] ?? 0) + (typeof data.quantity === 'number' ? data.quantity : 0);
+  });
+
+  const result: MonthlyUnits[] = [];
+  for (let i = months - 1; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const key = `${d.getFullYear()}-${d.getMonth()}`;
+    result.push({ month: MONTH_LABELS[d.getMonth()], units: unitsMap[key] ?? 0 });
+  }
+  return result;
+}
+>>>>>>> 8f32440 (Initial app update)

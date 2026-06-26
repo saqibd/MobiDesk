@@ -1,12 +1,17 @@
 // App.tsx
+<<<<<<< HEAD
 import React from 'react';
 import { Text, TextInput, ActivityIndicator, View } from 'react-native';
 import {
   useFonts,
+=======
+import {
+>>>>>>> 8f32440 (Initial app update)
   Inter_400Regular,
   Inter_500Medium,
   Inter_600SemiBold,
   Inter_700Bold,
+<<<<<<< HEAD
 } from '@expo-google-fonts/inter';
 import { AuthProvider } from './src/context/AuthContext';
 import AppNavigator from './src/navigation/AppNavigator';
@@ -22,6 +27,14 @@ if (TextInput.defaultProps == null) (TextInput as any).defaultProps = {};
   { fontFamily: 'Inter_400Regular' },
   (TextInput as any).defaultProps?.style,
 ];
+=======
+  useFonts,
+} from '@expo-google-fonts/inter';
+import { ActivityIndicator, View } from 'react-native';
+import { AuthProvider } from './src/context/AuthContext';
+import AppNavigator from './src/navigation/AppNavigator';
+
+>>>>>>> 8f32440 (Initial app update)
 
 export default function App() {
   const [fontsLoaded] = useFonts({

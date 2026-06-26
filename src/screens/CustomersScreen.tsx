@@ -1,4 +1,5 @@
 // src/screens/CustomersScreen.tsx
+<<<<<<< HEAD
 import React, { useEffect, useState, useMemo } from 'react';
 import {
   View,
@@ -15,6 +16,27 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../navigation/AppNavigator';
 import { getCustomers, type Customer } from '../services/customerService';
+=======
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import type { RootStackParamList } from '../navigation/AppNavigator';
+import { Brand, Inter } from '../constants/brand';
+import { getCustomers, type Customer } from '../services/customerService';
+import { screenStyles as shared } from '../styles/screenStyles';
+>>>>>>> 8f32440 (Initial app update)
 
 type NavProp = NativeStackNavigationProp<RootStackParamList, 'Customers'>;
 
@@ -60,7 +82,11 @@ function CustomerListItem({
       </View>
 
       <TouchableOpacity onPress={() => onEdit(customer)} style={styles.editBtn}>
+<<<<<<< HEAD
         <Text style={styles.editBtnText}>Edit</Text>
+=======
+        <MaterialIcons name="edit" size={16} color={Brand.primary} />
+>>>>>>> 8f32440 (Initial app update)
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -108,6 +134,7 @@ const CustomersScreen: React.FC = () => {
 
   return (
     <ScrollView
+<<<<<<< HEAD
       contentContainerStyle={styles.container}
       keyboardShouldPersistTaps="handled"
     >
@@ -124,6 +151,22 @@ const CustomersScreen: React.FC = () => {
           style={styles.searchInput}
           placeholder="Search by name or phone"
           placeholderTextColor="#94A3B8"
+=======
+      contentContainerStyle={shared.container}
+      keyboardShouldPersistTaps="handled"
+    >
+      <Text style={shared.title}>Customers</Text>
+      <Text style={shared.subtitle}>
+        Manage customers and quickly access them for new sales.
+      </Text>
+
+      <View style={shared.searchBar}>
+        <MaterialIcons name="search" size={20} color={Brand.textSubtle} style={{ marginRight: 10 }} />
+        <TextInput
+          style={shared.searchInput}
+          placeholder="Search by name or phone"
+          placeholderTextColor={Brand.textSubtle}
+>>>>>>> 8f32440 (Initial app update)
           value={search}
           onChangeText={setSearch}
           clearButtonMode="while-editing"
@@ -131,6 +174,7 @@ const CustomersScreen: React.FC = () => {
         />
       </View>
 
+<<<<<<< HEAD
       {/* Actions */}
       <TouchableOpacity style={styles.primaryButton} onPress={onAddCustomer}>
         <Text style={styles.primaryButtonText}>+ Add Customer</Text>
@@ -157,6 +201,34 @@ const CustomersScreen: React.FC = () => {
             </>
           ) : (
             <Text style={styles.emptyTitle}>No customers found.</Text>
+=======
+      <TouchableOpacity style={shared.primaryButton} onPress={onAddCustomer}>
+        <Text style={shared.primaryButtonText}>+ Add customer</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.secondaryButton} onPress={onImportCsv}>
+        <MaterialIcons name="upload-file" size={18} color={Brand.text} />
+        <Text style={styles.secondaryButtonText}>Import / update from CSV</Text>
+      </TouchableOpacity>
+
+      {loading ? (
+        <View style={shared.loadingRow}>
+          <ActivityIndicator size="small" color={Brand.primary} />
+          <Text style={shared.loadingText}>Loading customers…</Text>
+        </View>
+      ) : filtered.length === 0 ? (
+        <View style={shared.emptyState}>
+          {customers.length === 0 ? (
+            <>
+              <MaterialIcons name="people" size={40} color={Brand.border} style={{ marginBottom: 12 }} />
+              <Text style={shared.emptyTitle}>No customers yet</Text>
+              <Text style={shared.emptyHint}>
+                Tap &quot;Add customer&quot; to create your first one.
+              </Text>
+            </>
+          ) : (
+            <Text style={shared.emptyTitle}>No customers found.</Text>
+>>>>>>> 8f32440 (Initial app update)
           )}
         </View>
       ) : (
@@ -171,6 +243,7 @@ const CustomersScreen: React.FC = () => {
 export default CustomersScreen;
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
   container: {
     padding: 16,
     paddingBottom: 40,
@@ -248,6 +321,32 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E2E8F0',
     borderRadius: 12,
+=======
+  secondaryButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    borderWidth: 1,
+    borderColor: Brand.border,
+    borderRadius: 12,
+    paddingVertical: 12,
+    backgroundColor: Brand.surface,
+    marginBottom: 20,
+  },
+  secondaryButtonText: {
+    color: Brand.text,
+    fontSize: 13,
+    fontFamily: Inter.semibold,
+  },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Brand.surface,
+    borderWidth: 1,
+    borderColor: Brand.border,
+    borderRadius: 14,
+>>>>>>> 8f32440 (Initial app update)
     padding: 14,
     marginBottom: 10,
   },
@@ -255,27 +354,42 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
+<<<<<<< HEAD
     backgroundColor: '#E5E7EB',
+=======
+    backgroundColor: Brand.primaryBg,
+>>>>>>> 8f32440 (Initial app update)
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
   },
   avatarText: {
     fontSize: 14,
+<<<<<<< HEAD
     fontWeight: '700',
     color: '#374151',
+=======
+    fontFamily: Inter.bold,
+    color: Brand.primary,
+>>>>>>> 8f32440 (Initial app update)
   },
   cardInfo: {
     flex: 1,
   },
   cardName: {
     fontSize: 14,
+<<<<<<< HEAD
     fontWeight: '600',
     color: '#0F172A',
+=======
+    fontFamily: Inter.semibold,
+    color: Brand.text,
+>>>>>>> 8f32440 (Initial app update)
     marginBottom: 2,
   },
   cardSub: {
     fontSize: 12,
+<<<<<<< HEAD
     color: '#64748B',
   },
   editBtn: {
@@ -314,5 +428,17 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#94A3B8',
     textAlign: 'center',
+=======
+    fontFamily: Inter.regular,
+    color: Brand.textMuted,
+  },
+  editBtn: {
+    padding: 8,
+    marginLeft: 8,
+    borderRadius: 8,
+    backgroundColor: Brand.background,
+    borderWidth: 1,
+    borderColor: Brand.border,
+>>>>>>> 8f32440 (Initial app update)
   },
 });
