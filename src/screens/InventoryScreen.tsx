@@ -1,21 +1,4 @@
 // src/screens/InventoryScreen.tsx
-<<<<<<< HEAD
-import React, { useEffect, useState, useMemo } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-  Alert,
-  TextInput,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { RootStackParamList } from '../navigation/AppNavigator';
-import { getProducts, type Product } from '../services/productService';
-=======
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -34,7 +17,6 @@ import type { RootStackParamList } from '../navigation/AppNavigator';
 import { Brand, Inter } from '../constants/brand';
 import { getProducts, type Product } from '../services/productService';
 import { screenStyles as shared } from '../styles/screenStyles';
->>>>>>> 8f32440 (Initial app update)
 
 type NavProp = NativeStackNavigationProp<RootStackParamList, 'Inventory'>;
 
@@ -130,11 +112,7 @@ function ProductListItem({
           <Text style={styles.editBtnText}>Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.shareBtn} onPress={() => onShare(product)} activeOpacity={0.7}>
-<<<<<<< HEAD
-          <Text style={styles.shareBtnText}>📲</Text>
-=======
-          <MaterialIcons name="share" size={18} color={Brand.primary} />
->>>>>>> 8f32440 (Initial app update)
+<MaterialIcons name="share" size={18} color={Brand.primary} />
         </TouchableOpacity>
       </View>
     </View>
@@ -173,18 +151,12 @@ function BrandGroup({
           </View>
         </View>
         {/* Chevron rotates visually: ▼ open, ▶ closed */}
-<<<<<<< HEAD
-        <Text style={[styles.groupChevron, !open && styles.groupChevronClosed]}>
-          ▼
-        </Text>
-=======
-        <MaterialIcons
+<MaterialIcons
           name="keyboard-arrow-down"
           size={22}
           color={Brand.primary}
           style={!open ? styles.groupChevronClosed : undefined}
         />
->>>>>>> 8f32440 (Initial app update)
       </TouchableOpacity>
 
       {/* Divider always visible */}
@@ -251,25 +223,7 @@ const InventoryScreen: React.FC = () => {
 
   return (
     <ScrollView
-<<<<<<< HEAD
-      contentContainerStyle={styles.container}
-      keyboardShouldPersistTaps="handled"
-    >
-      {/* Header */}
-      <Text style={styles.title}>Inventory</Text>
-      <Text style={styles.subtitle}>
-        Manage products, stock levels, and pricing.
-      </Text>
-
-      {/* Search */}
-      <View style={styles.searchBar}>
-        <Text style={styles.searchIcon}>🔍</Text>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search products by name or brand"
-          placeholderTextColor="#94A3B8"
-=======
-      contentContainerStyle={shared.container}
+contentContainerStyle={shared.container}
       keyboardShouldPersistTaps="handled"
     >
       <Text style={shared.title}>Inventory</Text>
@@ -283,7 +237,6 @@ const InventoryScreen: React.FC = () => {
           style={shared.searchInput}
           placeholder="Search products by name or brand"
           placeholderTextColor={Brand.textSubtle}
->>>>>>> 8f32440 (Initial app update)
           value={search}
           onChangeText={setSearch}
           clearButtonMode="while-editing"
@@ -291,46 +244,7 @@ const InventoryScreen: React.FC = () => {
         />
       </View>
 
-<<<<<<< HEAD
-      {/* Actions */}
-      <TouchableOpacity style={styles.primaryButton} onPress={onAddProduct}>
-        <Text style={styles.primaryButtonText}>+ Add Product</Text>
-      </TouchableOpacity>
-
-      <View style={styles.secondaryRow}>
-        <TouchableOpacity
-          style={[styles.outlineButton, { flex: 1 }]}
-          onPress={onScanBarcode}
-        >
-          <Text style={styles.outlineButtonText}>Scan Barcode</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.outlineButton, { flex: 1 }]}
-          onPress={onImportCsv}
-        >
-          <Text style={styles.outlineButtonText}>📥 Import CSV</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* List */}
-      {loading ? (
-        <View style={styles.loadingRow}>
-          <ActivityIndicator size="small" color="#2563EB" />
-          <Text style={styles.loadingText}>Loading inventory…</Text>
-        </View>
-      ) : groups.length === 0 ? (
-        <View style={styles.emptyState}>
-          {products.length === 0 ? (
-            <>
-              <Text style={styles.emptyTitle}>No products yet.</Text>
-              <Text style={styles.emptyHint}>
-                Tap "+ Add Product" or import a CSV file to get started.
-              </Text>
-            </>
-          ) : (
-            <Text style={styles.emptyTitle}>No products found for this search.</Text>
-=======
-      <TouchableOpacity style={shared.primaryButton} onPress={onAddProduct}>
+<TouchableOpacity style={shared.primaryButton} onPress={onAddProduct}>
         <Text style={shared.primaryButtonText}>+ Add product</Text>
       </TouchableOpacity>
 
@@ -362,7 +276,6 @@ const InventoryScreen: React.FC = () => {
             </>
           ) : (
             <Text style={shared.emptyTitle}>No products found for this search.</Text>
->>>>>>> 8f32440 (Initial app update)
           )}
         </View>
       ) : (
@@ -383,95 +296,12 @@ const InventoryScreen: React.FC = () => {
 export default InventoryScreen;
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
-  container: {
-    padding: 16,
-    paddingBottom: 40,
-    backgroundColor: '#F8FAFC',
-  },
-
-  // Header
-  title: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#0F172A',
-    marginBottom: 2,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: '#64748B',
-    marginBottom: 16,
-  },
-
-  // Search
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    marginBottom: 12,
-  },
-  searchIcon: {
-    fontSize: 14,
-    marginRight: 6,
-  },
-  searchInput: {
-    flex: 1,
-    height: 42,
-    fontSize: 14,
-    color: '#0F172A',
-  },
-
-  // Buttons
-  primaryButton: {
-    backgroundColor: '#2563EB',
-    paddingVertical: 13,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  primaryButtonText: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  secondaryRow: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 20,
-  },
-  outlineButton: {
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    borderRadius: 12,
-    paddingVertical: 11,
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-  },
-  outlineButtonText: {
-    color: '#0F172A',
-    fontSize: 13,
-    fontWeight: '500',
-  },
-
-  // Brand group
-  group: {
-    marginBottom: 16,
-    borderRadius: 14,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-=======
-  group: {
+group: {
     marginBottom: 14,
     borderRadius: 14,
     backgroundColor: Brand.surface,
     borderWidth: 1,
     borderColor: Brand.border,
->>>>>>> 8f32440 (Initial app update)
     overflow: 'hidden',
   },
   groupHeader: {
@@ -480,11 +310,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 14,
     paddingHorizontal: 16,
-<<<<<<< HEAD
-    backgroundColor: '#F1F5F9',
-=======
-    backgroundColor: Brand.borderLight,
->>>>>>> 8f32440 (Initial app update)
+backgroundColor: Brand.borderLight,
   },
   groupHeaderLeft: {
     flexDirection: 'row',
@@ -493,71 +319,37 @@ const styles = StyleSheet.create({
   },
   groupBrand: {
     fontSize: 15,
-<<<<<<< HEAD
-    fontWeight: '800',
-    color: '#0F172A',
-    letterSpacing: 0.2,
-  },
-  groupBadge: {
-    backgroundColor: '#E2E8F0',
-=======
-    fontFamily: Inter.bold,
+fontFamily: Inter.bold,
     color: Brand.text,
   },
   groupBadge: {
     backgroundColor: Brand.border,
->>>>>>> 8f32440 (Initial app update)
     borderRadius: 20,
     paddingHorizontal: 9,
     paddingVertical: 3,
   },
   groupBadgeText: {
     fontSize: 11,
-<<<<<<< HEAD
-    fontWeight: '600',
-    color: '#475569',
-  },
-  groupChevron: {
-    fontSize: 11,
-    color: '#2563EB',
-    fontWeight: '700',
-=======
-    fontFamily: Inter.semibold,
+fontFamily: Inter.semibold,
     color: Brand.textMuted,
->>>>>>> 8f32440 (Initial app update)
   },
   groupChevronClosed: {
     transform: [{ rotate: '-90deg' }],
   },
   groupDivider: {
     height: 1,
-<<<<<<< HEAD
-    backgroundColor: '#E2E8F0',
-=======
-    backgroundColor: Brand.border,
->>>>>>> 8f32440 (Initial app update)
+backgroundColor: Brand.border,
   },
   groupItems: {
     padding: 10,
     gap: 8,
   },
-<<<<<<< HEAD
-
-  // Product card
-  card: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-=======
-  card: {
+card: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Brand.background,
     borderWidth: 1,
     borderColor: Brand.border,
->>>>>>> 8f32440 (Initial app update)
     borderRadius: 12,
     padding: 12,
     marginBottom: 8,
@@ -566,24 +358,15 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 10,
-<<<<<<< HEAD
-    backgroundColor: '#E5E7EB',
-=======
-    backgroundColor: Brand.primaryBg,
->>>>>>> 8f32440 (Initial app update)
+backgroundColor: Brand.primaryBg,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
   },
   avatarText: {
     fontSize: 15,
-<<<<<<< HEAD
-    fontWeight: '700',
-    color: '#374151',
-=======
-    fontFamily: Inter.bold,
+fontFamily: Inter.bold,
     color: Brand.primary,
->>>>>>> 8f32440 (Initial app update)
   },
   cardInfo: {
     flex: 1,
@@ -597,43 +380,25 @@ const styles = StyleSheet.create({
   },
   cardName: {
     fontSize: 14,
-<<<<<<< HEAD
-    fontWeight: '600',
-    color: '#0F172A',
-    flexShrink: 1,
-  },
-  lowStockBadge: {
-    backgroundColor: '#FEE2E2',
-=======
-    fontFamily: Inter.semibold,
+fontFamily: Inter.semibold,
     color: Brand.text,
     flexShrink: 1,
   },
   lowStockBadge: {
     backgroundColor: Brand.dangerBg,
->>>>>>> 8f32440 (Initial app update)
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 6,
   },
   lowStockText: {
     fontSize: 10,
-<<<<<<< HEAD
-    fontWeight: '600',
-    color: '#DC2626',
-  },
-  cardSub: {
-    fontSize: 12,
-    color: '#64748B',
-=======
-    fontFamily: Inter.semibold,
+fontFamily: Inter.semibold,
     color: Brand.danger,
   },
   cardSub: {
     fontSize: 12,
     fontFamily: Inter.regular,
     color: Brand.textMuted,
->>>>>>> 8f32440 (Initial app update)
   },
   cardActions: {
     flexDirection: 'row',
@@ -645,54 +410,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 8,
     borderWidth: 1,
-<<<<<<< HEAD
-    borderColor: '#E2E8F0',
-    backgroundColor: '#F8FAFC',
-  },
-  editBtnText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#2563EB',
-  },
-  shareBtn: {
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    backgroundColor: '#F8FAFC',
-  },
-  shareBtnText: {
-    fontSize: 14,
-  },
-
-  // States
-  loadingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginTop: 20,
-  },
-  loadingText: {
-    fontSize: 13,
-    color: '#64748B',
-  },
-  emptyState: {
-    alignItems: 'center',
-    marginTop: 40,
-  },
-  emptyTitle: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#64748B',
-    marginBottom: 4,
-  },
-  emptyHint: {
-    fontSize: 13,
-    color: '#94A3B8',
-    textAlign: 'center',
-=======
-    borderColor: Brand.border,
+borderColor: Brand.border,
     backgroundColor: Brand.surface,
   },
   editBtnText: {
@@ -706,6 +424,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Brand.border,
     backgroundColor: Brand.surface,
->>>>>>> 8f32440 (Initial app update)
   },
 });

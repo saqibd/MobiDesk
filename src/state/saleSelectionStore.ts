@@ -1,9 +1,5 @@
 // src/state/saleSelectionStore.ts
-<<<<<<< HEAD
-import type { Product } from '../types';
-=======
 import type { ProductWithId as Product } from '../types/product';
->>>>>>> 8f32440 (Initial app update)
 
 export type SelectedCustomer = {
   id: string;

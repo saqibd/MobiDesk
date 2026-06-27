@@ -3,9 +3,7 @@
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
-<<<<<<< HEAD
-=======
-  },
+},
   "typescript.disableAutomaticTypeAcquisition": true,
   "typescript.tsdk": "node_modules/typescript/lib",
   "files.watcherExclude": {
@@ -19,6 +17,5 @@
   "files.exclude": {
     "**/node_modules": true,
     "**/.expo": true
->>>>>>> 8f32440 (Initial app update)
   }
 }

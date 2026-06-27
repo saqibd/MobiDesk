@@ -1,17 +1,9 @@
 // src/services/receiptService.ts
-<<<<<<< HEAD
-import { Platform } from 'react-native';
-import * as Print from 'expo-print';
-import * as Sharing from 'expo-sharing';
-import { Asset } from 'expo-asset';
-import * as FileSystem from 'expo-file-system';
-=======
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { Platform } from 'react-native';
->>>>>>> 8f32440 (Initial app update)
 import { COMPANY } from '../constants/companyInfo';
 import type { ProductWithId } from '../types/product';
 
@@ -56,11 +48,7 @@ async function getLogoDataUrl(): Promise<string | null> {
     const localUri = asset.localUri;
     if (!localUri) return null;
     const base64 = await FileSystem.readAsStringAsync(localUri, {
-<<<<<<< HEAD
-      encoding: FileSystem.EncodingType.Base64,
-=======
-      encoding: 'base64',
->>>>>>> 8f32440 (Initial app update)
+encoding: 'base64',
     });
     const ext = (localUri.split('.').pop() ?? 'png').toLowerCase();
     const mime = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : 'image/png';

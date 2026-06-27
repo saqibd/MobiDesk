@@ -1,20 +1,8 @@
 // src/firebase.ts
-<<<<<<< HEAD
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-=======
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { getApp, getApps, initializeApp } from 'firebase/app';
-import {
-  getAuth,
-  getReactNativePersistence,
-  GoogleAuthProvider,
-  initializeAuth,
-} from 'firebase/auth';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { Platform } from 'react-native';
->>>>>>> 8f32440 (Initial app update)
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCFrjz0lQxA69kzXD12t9hE1Zg2LIPO7XU',
@@ -27,14 +15,14 @@ const firebaseConfig = {
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-<<<<<<< HEAD
-export const db = getFirestore(app);
-export const auth = getAuth(app);
-=======
 function createAuth() {
   if (Platform.OS === 'web') {
     return getAuth(app);
   }
+
+  const ReactNativeAsyncStorage =
+    require('@react-native-async-storage/async-storage').default;
+  const { initializeAuth, getReactNativePersistence } = require('firebase/auth');
 
   try {
     return initializeAuth(app, {
@@ -51,5 +39,4 @@ function createAuth() {
 
 export const auth = createAuth();
 export const db = getFirestore(app);
->>>>>>> 8f32440 (Initial app update)
 export const googleProvider = new GoogleAuthProvider();

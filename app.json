@@ -1,19 +1,11 @@
 {
   "expo": {
-<<<<<<< HEAD
-    "name": "inventory-app-migrated",
-    "slug": "inventory-app-migrated",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "userInterfaceStyle": "light",
-    "entryPoint": "./App.tsx",
-=======
     "name": "MobiDesk",
     "slug": "mobidesk",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
->>>>>>> 8f32440 (Initial app update)
+    "entryPoint": "./App.tsx",
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -24,12 +16,8 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-<<<<<<< HEAD
-      "expo-web-browser"
-=======
       "expo-web-browser",
       "expo-asset"
->>>>>>> 8f32440 (Initial app update)
     ]
   }
 }

@@ -1,18 +1,6 @@
 // src/services/salesService.ts
 import {
-<<<<<<< HEAD
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  limit,
-  Timestamp,
-  DocumentData,
-  serverTimestamp,
-=======
-    addDoc,
+addDoc,
     collection,
     DocumentData,
     getDocs,
@@ -22,7 +10,6 @@ import {
     serverTimestamp,
     Timestamp,
     where,
->>>>>>> 8f32440 (Initial app update)
 } from 'firebase/firestore';
 import { db } from '../firebase';
 
@@ -114,9 +101,6 @@ export async function getRecentSales(limitCount = 3): Promise<Sale[]> {
   });
   return result;
 }
-<<<<<<< HEAD
-=======
-
 export async function getSalesForProduct(productId: string, limitCount = 5): Promise<Sale[]> {
   const q = query(
     salesCol,
@@ -211,4 +195,3 @@ export async function getMonthlyUnitsForProduct(productId: string, months = 6): 
   }
   return result;
 }
->>>>>>> 8f32440 (Initial app update)

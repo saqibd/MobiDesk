@@ -1,40 +1,29 @@
 // App.tsx
-<<<<<<< HEAD
+import {
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    useFonts,
+} from '@expo-google-fonts/inter';
 import React from 'react';
-import { Text, TextInput, ActivityIndicator, View } from 'react-native';
-import {
-  useFonts,
-=======
-import {
->>>>>>> 8f32440 (Initial app update)
-  Inter_400Regular,
-  Inter_500Medium,
-  Inter_600SemiBold,
-  Inter_700Bold,
-<<<<<<< HEAD
-} from '@expo-google-fonts/inter';
+import { ActivityIndicator, Text, TextInput, View } from 'react-native';
 import { AuthProvider } from './src/context/AuthContext';
 import AppNavigator from './src/navigation/AppNavigator';
 
-if (Text.defaultProps == null) (Text as any).defaultProps = {};
-(Text as any).defaultProps.style = [
+const TextAny = Text as typeof Text & { defaultProps?: { style?: unknown } };
+if (TextAny.defaultProps == null) TextAny.defaultProps = {};
+TextAny.defaultProps.style = [
   { fontFamily: 'Inter_400Regular' },
-  (Text as any).defaultProps?.style,
+  TextAny.defaultProps?.style,
 ];
 
-if (TextInput.defaultProps == null) (TextInput as any).defaultProps = {};
-(TextInput as any).defaultProps.style = [
+const TextInputAny = TextInput as typeof TextInput & { defaultProps?: { style?: unknown } };
+if (TextInputAny.defaultProps == null) TextInputAny.defaultProps = {};
+TextInputAny.defaultProps.style = [
   { fontFamily: 'Inter_400Regular' },
-  (TextInput as any).defaultProps?.style,
+  TextInputAny.defaultProps?.style,
 ];
-=======
-  useFonts,
-} from '@expo-google-fonts/inter';
-import { ActivityIndicator, View } from 'react-native';
-import { AuthProvider } from './src/context/AuthContext';
-import AppNavigator from './src/navigation/AppNavigator';
-
->>>>>>> 8f32440 (Initial app update)
 
 export default function App() {
   const [fontsLoaded] = useFonts({

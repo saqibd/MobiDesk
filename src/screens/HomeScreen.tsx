@@ -1,27 +1,4 @@
 // src/screens/HomeScreen.tsx
-<<<<<<< HEAD
-import React, { useEffect, useState, useMemo } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-  useWindowDimensions,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { RootStackParamList } from '../navigation/AppNavigator';
-import {
-  VictoryBar,
-  VictoryChart,
-  VictoryAxis,
-  VictoryTheme,
-} from 'victory-native';
-=======
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -48,7 +25,6 @@ import {
 import { Brand, Inter } from '../constants/brand';
 import { COMPANY } from '../constants/companyInfo';
 import type { RootStackParamList } from '../navigation/AppNavigator';
->>>>>>> 8f32440 (Initial app update)
 
 import {
   getProductStats,
@@ -58,33 +34,20 @@ import {
 import type { ProductWithId as Product } from '../types/product';
 
 import {
-<<<<<<< HEAD
-  getThreeMonthSalesTotal,
-  getMonthlySales,
-  getRecentSales,
-=======
   getMonthlySales,
   getRecentSales,
   getThreeMonthSalesTotal,
->>>>>>> 8f32440 (Initial app update)
   type MonthlySale,
   type Sale,
 } from '../services/salesService';
 
-<<<<<<< HEAD
-=======
-import { signOut } from '../services/authService';
->>>>>>> 8f32440 (Initial app update)
 import { getPendingOrdersCount } from '../services/ordersService';
 import { getActiveRemindersCount } from '../services/remindersService';
+import { signOut } from '../services/authService';
 
 type HomeNavProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
-
-<<<<<<< HEAD
-=======
 type MaterialIconName = ComponentProps<typeof MaterialIcons>['name'];
 
->>>>>>> 8f32440 (Initial app update)
 function formatPKR(val: number) {
   if (!val) return 'PKR 0';
   if (val >= 1_000_000) return `PKR ${(val / 1_000_000).toFixed(1)}M`;
@@ -99,23 +62,9 @@ function getGreeting() {
   return 'Good evening';
 }
 
-<<<<<<< HEAD
-const QUICK_ACTIONS = [
-  { label: 'Sales', route: 'Sales' as const, icon: '🛒', color: '#2563EB', bg: '#EFF6FF' },
-  { label: 'Inventory', route: 'Inventory' as const, icon: '📦', color: '#16A34A', bg: '#F0FDF4' },
-  { label: 'Customers', route: 'Customers' as const, icon: '👤', color: '#7C3AED', bg: '#F5F3FF' },
-  { label: 'Reports', route: 'Reports' as const, icon: '📊', color: '#EA580C', bg: '#FFF7ED' },
-];
-
-const KPI_CONFIG = [
-  { key: 'totalStock', label: 'Total Stock', accent: '#2563EB', bg: '#EFF6FF', icon: '📦' },
-  { key: 'stockValue', label: 'Stock Value', accent: '#16A34A', bg: '#F0FDF4', icon: '💰' },
-  { key: 'lowStock',   label: 'Low Stock',   accent: '#DC2626', bg: '#FEF2F2', icon: '⚠️' },
-  { key: 'sales3mo',  label: '3-mo Sales',  accent: '#7C3AED', bg: '#F5F3FF', icon: '📈' },
-=======
 const QUICK_ACTIONS: {
   label: string;
-  route: keyof RootStackParamList;
+  route: 'Sales' | 'Inventory' | 'Customers' | 'Reports' | 'Settings';
   icon: MaterialIconName;
 }[] = [
   { label: 'Sales', route: 'Sales', icon: 'point-of-sale' },
@@ -136,7 +85,6 @@ const KPI_CONFIG: {
   { key: 'stockValue', label: 'Stock value', icon: 'payments', accent: Brand.success, iconBg: Brand.successBg },
   { key: 'lowStock', label: 'Low stock', icon: 'warning', accent: Brand.danger, iconBg: Brand.dangerBg },
   { key: 'sales3mo', label: '3-mo sales', icon: 'trending-up', accent: Brand.primaryDark, iconBg: Brand.primaryBg },
->>>>>>> 8f32440 (Initial app update)
 ];
 
 export default function HomeScreen() {
@@ -159,10 +107,7 @@ export default function HomeScreen() {
       Promise.race([p, new Promise<T>(res => setTimeout(() => res(fallback), ms))]);
 
     const loadData = async () => {
-<<<<<<< HEAD
-=======
       setLoading(true);
->>>>>>> 8f32440 (Initial app update)
       try {
         const [
           statsResult,
@@ -228,42 +173,22 @@ export default function HomeScreen() {
     {
       label: 'Low stock items',
       value: stats?.lowStockCount ?? 0,
-<<<<<<< HEAD
-      color: '#DC2626',
-      bg: '#FEF2F2',
-      icon: '⚠️',
-=======
       icon: 'warning' as MaterialIconName,
       accent: Brand.danger,
       iconBg: Brand.dangerBg,
       route: 'Inventory' as const,
->>>>>>> 8f32440 (Initial app update)
     },
     {
       label: 'Pending orders',
       value: pendingOrdersCount ?? 0,
-<<<<<<< HEAD
-      color: '#EA580C',
-      bg: '#FFF7ED',
-      icon: '📋',
-=======
       icon: 'receipt-long' as MaterialIconName,
       accent: Brand.warning,
       iconBg: Brand.warningBg,
       route: 'Sales' as const,
->>>>>>> 8f32440 (Initial app update)
     },
     {
       label: 'Active reminders',
       value: remindersCount ?? 0,
-<<<<<<< HEAD
-      color: '#7C3AED',
-      bg: '#F5F3FF',
-      icon: '🔔',
-    },
-  ];
-
-=======
       icon: 'notifications' as MaterialIconName,
       accent: Brand.primary,
       iconBg: Brand.primaryBg,
@@ -296,7 +221,6 @@ export default function HomeScreen() {
     ]);
   };
 
->>>>>>> 8f32440 (Initial app update)
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView
@@ -305,15 +229,7 @@ export default function HomeScreen() {
       >
         {/* Header */}
         <View style={styles.header}>
-<<<<<<< HEAD
-          <View>
-            <Text style={styles.greeting}>{getGreeting()}</Text>
-            <Text style={styles.headerTitle}>Dashboard</Text>
-          </View>
-          <View style={styles.datePill}>
-            <Text style={styles.dateText}>{today}</Text>
-=======
-          <View style={styles.headerBrandRow}>
+<View style={styles.headerBrandRow}>
             <Image
               source={require('../../assets/images/logo.png')}
               style={styles.headerLogo}
@@ -338,23 +254,15 @@ export default function HomeScreen() {
             >
               <MaterialIcons name="logout" size={20} color={Brand.danger} />
             </TouchableOpacity>
->>>>>>> 8f32440 (Initial app update)
           </View>
         </View>
 
         {/* Search */}
         <View style={styles.searchRow}>
-<<<<<<< HEAD
-          <Text style={styles.searchIcon}>🔍</Text>
-          <TextInput
-            placeholder="Search products by name, SKU or barcode…"
-            placeholderTextColor="#94A3B8"
-=======
-          <MaterialIcons name="search" size={20} color={Brand.textSubtle} style={styles.searchIcon} />
+<MaterialIcons name="search" size={20} color={Brand.textSubtle} style={styles.searchIcon} />
           <TextInput
             placeholder="Search products by name, SKU or barcode…"
             placeholderTextColor={Brand.textSubtle}
->>>>>>> 8f32440 (Initial app update)
             value={search}
             onChangeText={setSearch}
             style={styles.searchInput}
@@ -365,13 +273,7 @@ export default function HomeScreen() {
         {filteredProducts.length > 0 && (
           <View style={styles.searchResults}>
             {filteredProducts.map(p => (
-<<<<<<< HEAD
-              <View key={p.id} style={styles.searchResultItem}>
-                <Text style={styles.searchResultName}>{p.name}</Text>
-                <Text style={styles.searchResultSku}>{p.sku ?? p.barcode ?? ''}</Text>
-              </View>
-=======
-              <TouchableOpacity
+<TouchableOpacity
                 key={p.id}
                 style={styles.searchResultItem}
                 activeOpacity={0.75}
@@ -386,26 +288,12 @@ export default function HomeScreen() {
                 </View>
                 <MaterialIcons name="chevron-right" size={22} color={Brand.textSubtle} />
               </TouchableOpacity>
->>>>>>> 8f32440 (Initial app update)
             ))}
           </View>
         )}
 
         {/* Quick Actions */}
-<<<<<<< HEAD
-        <Text style={styles.sectionLabel}>QUICK ACTIONS</Text>
-        <View style={styles.actionsRow}>
-          {QUICK_ACTIONS.map(a => (
-            <TouchableOpacity
-              key={a.route}
-              style={[styles.actionBtn, { backgroundColor: a.bg }]}
-              onPress={() => navigation.navigate(a.route)}
-              activeOpacity={0.75}
-            >
-              <Text style={styles.actionIcon}>{a.icon}</Text>
-              <Text style={[styles.actionLabel, { color: a.color }]}>{a.label}</Text>
-=======
-        <Text style={styles.sectionLabel}>Quick actions</Text>
+<Text style={styles.sectionLabel}>Quick actions</Text>
         <View style={styles.actionsGrid}>
           {QUICK_ACTIONS.map(a => (
             <TouchableOpacity
@@ -418,27 +306,18 @@ export default function HomeScreen() {
                 <MaterialIcons name={a.icon} size={22} color={Brand.primary} />
               </View>
               <Text style={styles.actionLabel}>{a.label}</Text>
->>>>>>> 8f32440 (Initial app update)
             </TouchableOpacity>
           ))}
         </View>
 
         {/* KPI Grid */}
-<<<<<<< HEAD
-        <Text style={styles.sectionLabel}>OVERVIEW</Text>
-        <View style={styles.kpiGrid}>
-          {KPI_CONFIG.map(k => (
-            <View key={k.key} style={[styles.kpiCard, { backgroundColor: k.bg }]}>
-              <Text style={styles.kpiIcon}>{k.icon}</Text>
-=======
-        <Text style={styles.sectionLabel}>Overview</Text>
+<Text style={styles.sectionLabel}>Overview</Text>
         <View style={styles.kpiGrid}>
           {KPI_CONFIG.map(k => (
             <View key={k.key} style={styles.kpiCard}>
               <View style={[styles.kpiIconWrap, { backgroundColor: k.iconBg }]}>
                 <MaterialIcons name={k.icon} size={18} color={k.accent} />
               </View>
->>>>>>> 8f32440 (Initial app update)
               <Text style={[styles.kpiValue, { color: k.accent }]}>{kpiValues[k.key]}</Text>
               <Text style={styles.kpiLabel}>{k.label}</Text>
             </View>
@@ -446,19 +325,7 @@ export default function HomeScreen() {
         </View>
 
         {/* Alerts */}
-<<<<<<< HEAD
-        <Text style={styles.sectionLabel}>ATTENTION NEEDED</Text>
-        <View style={styles.alertsRow}>
-          {alertItems.map(a => (
-            <View key={a.label} style={[styles.alertCard, { backgroundColor: a.bg }]}>
-              <Text style={styles.alertIcon}>{a.icon}</Text>
-              <View>
-                <Text style={[styles.alertValue, { color: a.color }]}>{a.value}</Text>
-                <Text style={styles.alertLabel}>{a.label}</Text>
-              </View>
-            </View>
-=======
-        <Text style={styles.sectionLabel}>Attention needed</Text>
+<Text style={styles.sectionLabel}>Attention needed</Text>
         <View style={styles.alertsCard}>
           <View style={styles.alertsHeader}>
             <Text style={styles.alertsHeaderTitle}>
@@ -484,31 +351,11 @@ export default function HomeScreen() {
               <Text style={[styles.alertValue, { color: a.accent }]}>{a.value}</Text>
               <MaterialIcons name="chevron-right" size={20} color={Brand.textSubtle} />
             </TouchableOpacity>
->>>>>>> 8f32440 (Initial app update)
           ))}
         </View>
 
         {/* Chart */}
-<<<<<<< HEAD
-        <Text style={styles.sectionLabel}>MONTHLY SALES</Text>
-        <View style={styles.chartCard}>
-          {loading ? (
-            <ActivityIndicator color="#2563EB" style={{ marginVertical: 24 }} />
-          ) : !hasBarData ? (
-            <Text style={styles.muted}>No sales data yet</Text>
-          ) : (
-            <VictoryChart
-              width={chartWidth}
-              height={190}
-              padding={{ top: 10, bottom: 36, left: 52, right: 12 }}
-              domainPadding={{ x: 16 }}
-            >
-              <VictoryAxis
-                style={{
-                  axis: { stroke: '#E2E8F0' },
-                  tickLabels: { fontSize: 9, fill: '#94A3B8', fontWeight: '500' },
-=======
-        <Text style={styles.sectionLabel}>Monthly sales</Text>
+<Text style={styles.sectionLabel}>Monthly sales</Text>
         <View style={styles.chartCard}>
           {threeMonthSales != null && threeMonthSales > 0 && (
             <Text style={styles.chartSubtitle}>
@@ -533,7 +380,6 @@ export default function HomeScreen() {
                 style={{
                   axis: { stroke: Brand.border },
                   tickLabels: { fontSize: 10, fill: Brand.textSubtle, fontFamily: Inter.medium },
->>>>>>> 8f32440 (Initial app update)
                   grid: { stroke: 'transparent' },
                 }}
               />
@@ -541,116 +387,32 @@ export default function HomeScreen() {
                 dependentAxis
                 style={{
                   axis: { stroke: 'transparent' },
-<<<<<<< HEAD
-                  tickLabels: { fontSize: 9, fill: '#94A3B8' },
-                  grid: { stroke: '#F1F5F9', strokeDasharray: '4' },
-=======
-                  tickLabels: { fontSize: 9, fill: Brand.textSubtle, fontFamily: Inter.regular },
+tickLabels: { fontSize: 9, fill: Brand.textSubtle, fontFamily: Inter.regular },
                   grid: { stroke: Brand.borderLight, strokeDasharray: '4' },
->>>>>>> 8f32440 (Initial app update)
                 }}
               />
               <VictoryBar
                 data={barData}
                 style={{
                   data: {
-<<<<<<< HEAD
-                    fill: '#2563EB',
-                    borderRadius: 4,
-                  },
-                }}
-                cornerRadius={{ top: 4 }}
-=======
-                    fill: Brand.primary,
+fill: Brand.primary,
                   },
                 }}
                 cornerRadius={{ top: 6 }}
                 barWidth={22}
->>>>>>> 8f32440 (Initial app update)
               />
             </VictoryChart>
           )}
         </View>
 
-<<<<<<< HEAD
-        <View style={{ height: 16 }} />
-=======
-        <View style={styles.bottomSpacer} />
->>>>>>> 8f32440 (Initial app update)
+<View style={styles.bottomSpacer} />
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
-  safe: { flex: 1, backgroundColor: '#F1F5F9' },
-  container: { paddingHorizontal: 16, paddingTop: 8 },
-
-  /* Header */
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    marginBottom: 14,
-  },
-  greeting: {
-    fontSize: 12,
-    color: '#64748B',
-    fontWeight: '500',
-    letterSpacing: 0.3,
-    textTransform: 'uppercase',
-    marginBottom: 2,
-  },
-  headerTitle: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: '#0F172A',
-    letterSpacing: -0.5,
-  },
-  datePill: {
-    backgroundColor: '#0F172A',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 20,
-  },
-  dateText: {
-    color: '#F8FAFC',
-    fontSize: 11,
-    fontWeight: '600',
-    letterSpacing: 0.2,
-  },
-
-  /* Search */
-  searchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    height: 42,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 3,
-    elevation: 1,
-  },
-  searchIcon: { fontSize: 14, marginRight: 8 },
-  searchInput: { flex: 1, fontSize: 13, color: '#0F172A', height: 42 },
-
-  /* Search Results */
-  searchResults: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    marginTop: -10,
-    marginBottom: 12,
-=======
-  safe: { flex: 1, backgroundColor: Brand.background },
+safe: { flex: 1, backgroundColor: Brand.background },
   container: { paddingHorizontal: 16, paddingTop: 8 },
 
   header: {
@@ -748,117 +510,11 @@ const styles = StyleSheet.create({
     borderColor: Brand.border,
     marginTop: -12,
     marginBottom: 16,
->>>>>>> 8f32440 (Initial app update)
     overflow: 'hidden',
   },
   searchResultItem: {
     flexDirection: 'row',
-<<<<<<< HEAD
-    justifyContent: 'space-between',
-    paddingVertical: 9,
-    paddingHorizontal: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
-  },
-  searchResultName: { fontSize: 13, color: '#0F172A', fontWeight: '500' },
-  searchResultSku: { fontSize: 11, color: '#94A3B8' },
-
-  /* Section Labels */
-  sectionLabel: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: '#94A3B8',
-    letterSpacing: 1.2,
-    marginBottom: 8,
-    marginTop: 4,
-  },
-
-  /* Quick Actions */
-  actionsRow: {
-    flexDirection: 'row',
-    marginBottom: 18,
-  },
-  actionBtn: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-    borderRadius: 12,
-    marginHorizontal: 4,
-  },
-  actionIcon: { fontSize: 18, marginBottom: 4 },
-  actionLabel: { fontSize: 11, fontWeight: '600', letterSpacing: 0.1, textAlign: 'center' },
-
-  /* KPI */
-  kpiGrid: {
-    flexDirection: 'row',
-    marginBottom: 14,
-  },
-  kpiCard: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-    borderRadius: 12,
-    marginHorizontal: 4,
-  },
-  kpiIcon: { fontSize: 18, marginBottom: 3 },
-  kpiLabel: {
-    fontSize: 10,
-    color: '#64748B',
-    fontWeight: '600',
-    letterSpacing: 0.1,
-    textAlign: 'center',
-    marginTop: 2,
-  },
-  kpiValue: {
-    fontSize: 14,
-    fontWeight: '700',
-    letterSpacing: -0.3,
-    textAlign: 'center',
-  },
-
-  /* Alerts */
-  alertsRow: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 14,
-  },
-  alertCard: {
-    flex: 1,
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 6,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  alertIcon: { fontSize: 13 },
-  alertValue: { fontSize: 15, fontWeight: '700', letterSpacing: -0.3 },
-  alertLabel: { fontSize: 9, color: '#64748B', fontWeight: '600', flexShrink: 1, letterSpacing: 0.1 },
-
-  /* Chart */
-  chartCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    paddingTop: 12,
-    paddingHorizontal: 4,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  muted: {
-    color: '#94A3B8',
-    fontSize: 13,
-    textAlign: 'center',
-    paddingVertical: 24,
-  },
-=======
-    alignItems: 'center',
+alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 12,
     paddingHorizontal: 14,
@@ -1056,5 +712,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   bottomSpacer: { height: 16 },
->>>>>>> 8f32440 (Initial app update)
 });

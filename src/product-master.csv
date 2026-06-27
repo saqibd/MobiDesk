@@ -1,7 +1,2 @@
-<<<<<<< HEAD
 ﻿name,price,stock,brand,modelNumber,serialNumber,sku,category,condition,ptaStatus,ramMemory,screenSize,purchasePrice,notes
 Oppo M26,25000,3,OPPO,M26,12345,123456,phone,new,approved,64GB,5.5,20000,
-=======
-﻿name,price,stock,brand,modelNumber,serialNumber,sku,category,condition,ptaStatus,ramMemory,screenSize,purchasePrice,notes
-Oppo M26,25000,3,OPPO,M26,12345,123456,phone,new,approved,64GB,5.5,20000,
->>>>>>> 8f32440 (Initial app update)

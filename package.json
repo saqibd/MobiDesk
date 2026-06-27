@@ -13,10 +13,7 @@
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.2",
     "@expo/vector-icons": "^15.0.3",
-<<<<<<< HEAD
-=======
     "@react-native-async-storage/async-storage": "2.2.0",
->>>>>>> 8f32440 (Initial app update)
     "@react-native-firebase/app": "^24.0.0",
     "@react-native-firebase/firestore": "^24.0.0",
     "@react-navigation/bottom-tabs": "^7.4.0",
@@ -24,11 +21,8 @@
     "@react-navigation/native": "^7.2.2",
     "@react-navigation/native-stack": "^7.14.12",
     "expo": "~54.0.34",
-<<<<<<< HEAD
-=======
     "expo-asset": "~12.0.13",
     "expo-auth-session": "~7.0.11",
->>>>>>> 8f32440 (Initial app update)
     "expo-camera": "~17.0.10",
     "expo-constants": "~18.0.13",
     "expo-document-picker": "~14.0.8",
@@ -59,10 +53,7 @@
     "victory-native": "^36.9.2"
   },
   "devDependencies": {
-<<<<<<< HEAD
-=======
     "@types/papaparse": "^5.5.2",
->>>>>>> 8f32440 (Initial app update)
     "@types/react": "~19.1.0",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
